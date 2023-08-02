@@ -11,12 +11,15 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
+import { MailService } from '../mail/mail.service';
+
 @Injectable({})
 export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwt: JwtService,
     private config: ConfigService,
+    private mailerService: MailService,
   ) {}
 
   /**
@@ -146,12 +149,17 @@ export class AuthService {
       'CLIENT_BASE_URL',
     )}/auth/reset-password?token=${resetToken}`;
 
-    delete user.password;
-    return {
-      ...user,
-      resetUrl,
-      message: 'Reset email successfully sent',
-    };
+    try {
+      await this.mailerService.sendPasswordResetEmail(user.email, resetUrl);
+      delete user.password;
+      return {
+        ...user,
+        resetUrl,
+        message: 'Reset email successfully sent',
+      };
+    } catch (error) {
+      throw new Error(`Error sending user email: ${error.message}`);
+    }
   }
 
   /**
