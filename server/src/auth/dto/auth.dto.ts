@@ -10,14 +10,8 @@ export class AuthDTO {
   password: string;
 }
 
-export class ForgotPwdDTO {
-  @IsString()
+export class ResendConfirmEmailDTO {
+  @IsEmail()
   @IsNotEmpty()
   email: string;
-}
-
-export class ResetPwdDTO {
-  @IsString()
-  @IsNotEmpty()
-  password: string;
 }
