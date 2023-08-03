@@ -82,11 +82,47 @@ export class AuthService {
           },
         },
       });
-      delete user.password;
-      return {
-        ...user,
-        access_token: await this.signToken(user.id, user.email),
-      };
+
+      // save confirmation token to db
+      const confirmToken = await this.signToken(user.id, user.email);
+
+      try {
+        await this.prisma.confirmationToken.create({
+          data: {
+            token: confirmToken,
+            user: {
+              connect: {
+                id: user.id,
+              },
+            },
+          },
+        });
+      } catch (error) {
+        if (error instanceof PrismaClientKnownRequestError) {
+          if (error.code !== 'P2014') throw error;
+          throw new ForbiddenException(
+            'Confirmation token already exists for this user',
+          );
+        } else {
+          throw error;
+        }
+      }
+
+      // send confirmation email
+      const confirmUrl = `${this.config.get(
+        'CLIENT_BASE_URL',
+      )}/auth/confirm-email?token=${confirmToken}`;
+
+      try {
+        await this.mailerService.sendConfirmationEmail(user.email, confirmUrl);
+        delete user.password;
+        return {
+          ...user,
+          access_token: await this.signToken(user.id, user.email),
+        };
+      } catch (error) {
+        throw new Error(`Error sending user email: ${error.message}`);
+      }
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
@@ -97,6 +133,66 @@ export class AuthService {
       } else {
         throw error;
       }
+    }
+  }
+
+  /**
+   * Confirm email
+   * @param token
+   * @returns user object with message
+   * */
+  async confirmEmail(token: string) {
+    // check if token exists
+    const tokenExists = await this.prisma.confirmationToken.findUnique({
+      where: {
+        token,
+      },
+    });
+
+    if (!tokenExists) {
+      throw new UnauthorizedException('Invalid confirmation token');
+    }
+
+    // verify token
+    const decodedToken = await this.verifyToken(token);
+    const { sub: id } = decodedToken;
+
+    try {
+      // check if user exists
+      const user = await this.prisma.user.findUnique({
+        where: {
+          id,
+        },
+      });
+
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+
+      // update user confirmed status
+      await this.prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          confirmed: true,
+        },
+      });
+
+      // delete confirmation token
+      await this.prisma.confirmationToken.delete({
+        where: {
+          token,
+        },
+      });
+      delete user.password;
+      return {
+        ...user,
+        confirmed: true,
+        message: 'Email confirmed successfully',
+      };
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -238,7 +334,7 @@ export class AuthService {
       const decoded = await this.jwt.verifyAsync(token, { secret });
       return decoded;
     } catch (error) {
-      throw new UnauthorizedException('Invalid reset token');
+      throw new UnauthorizedException('Invalid token');
     }
   }
 }

@@ -24,6 +24,13 @@ export class AuthController {
     return this.authService.signin(body);
   }
 
+  // Confirm email
+  @HttpCode(HttpStatus.OK)
+  @Post('confirm-email')
+  confirmEmail(@Query('token') token: string) {
+    return this.authService.confirmEmail(token);
+  }
+
   @HttpCode(HttpStatus.OK)
   @Post('forgot-password')
   forgotPassword(@Body() body: ForgotPwdDTO) {
