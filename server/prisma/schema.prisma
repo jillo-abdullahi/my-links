@@ -37,14 +37,16 @@ model Profile {
   githubLink          String?
   personalWebsiteLink String?
   youtubeLink         String?
+  devToLink           String?
+  codeWarsLink        String?
+  freeCodeCampLink    String?
+  mediumLink          String?
   linkedinLink        String?
-  xLink               String?
   stackoverflowLink   String?
+  xLink               String?
   facebookLink        String?
   instagramLink       String?
   threadsLink         String?
-  mediumLink          String?
-  devToLink           String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
