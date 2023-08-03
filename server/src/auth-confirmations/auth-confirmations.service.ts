@@ -122,7 +122,6 @@ export class AuthConfirmationsService {
           'Reset token already exists for this user',
         );
       } else {
-        console.log('THIS IS THE ERROR', error);
         throw error;
       }
     }
