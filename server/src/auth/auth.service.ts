@@ -12,12 +12,16 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
 import { MailService } from '../mail/mail.service';
+import { JwtAuthService } from './jwtUtils';
 
 @Injectable({})
 export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwt: JwtService,
+
+    // this service is used to sign and verify tokens
+    private jwtAuthService: JwtAuthService,
     private config: ConfigService,
     private mailerService: MailService,
   ) {}
@@ -46,7 +50,10 @@ export class AuthService {
         delete user.password;
         return {
           ...user,
-          access_token: await this.signToken(user.id, user.email),
+          access_token: await this.jwtAuthService.signToken(
+            user.id,
+            user.email,
+          ),
         };
       } else {
         // password did not match
@@ -84,7 +91,10 @@ export class AuthService {
       });
 
       // save confirmation token to db
-      const confirmToken = await this.signToken(user.id, user.email);
+      const confirmToken = await this.jwtAuthService.signToken(
+        user.id,
+        user.email,
+      );
 
       try {
         await this.prisma.confirmationToken.create({
@@ -118,7 +128,10 @@ export class AuthService {
         delete user.password;
         return {
           ...user,
-          access_token: await this.signToken(user.id, user.email),
+          access_token: await this.jwtAuthService.signToken(
+            user.id,
+            user.email,
+          ),
         };
       } catch (error) {
         throw new Error(`Error sending user email: ${error.message}`);
@@ -154,7 +167,7 @@ export class AuthService {
     }
 
     // verify token
-    const decodedToken = await this.verifyToken(token);
+    const decodedToken = await this.jwtAuthService.verifyToken(token);
     const { sub: id } = decodedToken;
 
     try {
@@ -215,7 +228,7 @@ export class AuthService {
     }
 
     // generate reset token
-    const resetToken = await this.signToken(user.id, user.email);
+    const resetToken = await this.jwtAuthService.signToken(user.id, user.email);
     // save reset token to db
 
     try {
@@ -277,7 +290,7 @@ export class AuthService {
     }
 
     // verify token
-    const decodedToken = await this.verifyToken(token);
+    const decodedToken = await this.jwtAuthService.verifyToken(token);
     const { sub: id } = decodedToken;
 
     try {
@@ -313,28 +326,6 @@ export class AuthService {
       return { ...user, message: 'Password reset successfully' };
     } catch (error) {
       throw error;
-    }
-  }
-
-  // sign token for user registration and login
-  async signToken(userId: string, email: string): Promise<string> {
-    const secret = this.config.get('JWT_SECRET');
-    const payload = { sub: userId, email };
-    const token = await this.jwt.signAsync(payload, {
-      expiresIn: '1h',
-      secret,
-    });
-    return token;
-  }
-
-  // verify password reset token
-  async verifyToken(token: string): Promise<any> {
-    try {
-      const secret = this.config.get('JWT_SECRET');
-      const decoded = await this.jwt.verifyAsync(token, { secret });
-      return decoded;
-    } catch (error) {
-      throw new UnauthorizedException('Invalid token');
     }
   }
 }
