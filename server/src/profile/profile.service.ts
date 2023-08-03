@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   UnauthorizedException,
+  Param,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GetProfileDTO, UpdateProfileDTO } from './dto';
@@ -11,20 +12,22 @@ export class ProfileService {
   constructor(private prisma: PrismaService) {}
 
   // get user profile
-  async getProfile(body: GetProfileDTO) {
+  async getProfile(@Param('username') user: GetProfileDTO) {
     try {
-      const { userId } = body;
-      const profile = await this.prisma.profile.findUnique({
+      const userProfile = await this.prisma.user.findUnique({
         where: {
-          userId,
+          username: user.username,
+        },
+        include: {
+          profile: true,
         },
       });
 
-      if (!profile) {
-        throw new NotFoundException('Profile not found');
+      if (!userProfile) {
+        throw new NotFoundException('User not found');
       }
-
-      return profile;
+      delete userProfile.password;
+      return userProfile;
     } catch (error) {
       throw error;
     }

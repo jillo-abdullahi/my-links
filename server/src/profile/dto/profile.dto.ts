@@ -61,5 +61,5 @@ export class UpdateProfileDTO {
 export class GetProfileDTO {
   @IsString()
   @IsNotEmpty()
-  userId: string;
+  username: string;
 }

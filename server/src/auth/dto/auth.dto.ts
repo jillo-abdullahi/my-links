@@ -10,8 +10,20 @@ export class AuthDTO {
   password: string;
 }
 
+export class RegisterDTO extends AuthDTO {
+  @IsNotEmpty()
+  @IsString()
+  username: string;
+}
+
 export class ResendConfirmEmailDTO {
   @IsEmail()
   @IsNotEmpty()
   email: string;
+}
+
+export class CheckUsernameDTO {
+  @IsNotEmpty()
+  @IsString()
+  username: string;
 }

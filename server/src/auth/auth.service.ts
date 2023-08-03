@@ -1,6 +1,11 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Body, ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AuthDTO, ResendConfirmEmailDTO } from './dto';
+import {
+  AuthDTO,
+  CheckUsernameDTO,
+  RegisterDTO,
+  ResendConfirmEmailDTO,
+} from './dto';
 import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { ConfigService } from '@nestjs/config';
@@ -62,9 +67,21 @@ export class AuthService {
    * @param body
    * @returns user object with access token
    * */
-  async signup(body: AuthDTO) {
+  async signup(body: RegisterDTO) {
     let hashPassword;
-    const { email, password } = body;
+    const { username, email, password } = body;
+
+    // check if username already exists
+    const usernameExists = await this.prisma.user.findUnique({
+      where: {
+        username,
+      },
+    });
+
+    if (usernameExists) {
+      throw new ForbiddenException('Username already exists');
+    }
+
     try {
       hashPassword = await argon.hash(password);
     } catch (error) {
@@ -75,6 +92,7 @@ export class AuthService {
       const user = await this.prisma.user.create({
         data: {
           email,
+          username,
           password: hashPassword,
           profile: {
             create: {}, // create empty profile for current user
@@ -116,7 +134,11 @@ export class AuthService {
       )}/auth/confirm-email?token=${confirmToken}`;
 
       try {
-        await this.mailerService.sendConfirmationEmail(user.email, confirmUrl);
+        await this.mailerService.sendConfirmationEmail(
+          user.email,
+          user.username,
+          confirmUrl,
+        );
         delete user.password;
         return {
           ...user,
@@ -206,12 +228,41 @@ export class AuthService {
     )}/auth/confirm-email?token=${confirmToken}`;
 
     try {
-      await this.mailerService.sendConfirmationEmail(user.email, confirmUrl);
+      await this.mailerService.sendConfirmationEmail(
+        user.email,
+        user.username,
+        confirmUrl,
+      );
       return {
         message: 'Confirmation email sent',
       };
     } catch (error) {
       throw new Error(`Error sending user email: ${error.message}`);
+    }
+  }
+
+  /**
+   * check username
+   * @param username
+   * @returns boolean
+   * */
+  async checkUsername(@Body() body: CheckUsernameDTO) {
+    const { username } = body;
+
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: {
+          username,
+        },
+      });
+
+      if (user) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      throw error;
     }
   }
 }

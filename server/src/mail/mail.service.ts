@@ -6,13 +6,18 @@ export class MailService {
   constructor(private mailerService: MailerService) {}
 
   // password reset
-  async sendPasswordResetEmail(userEmail: string, url: string) {
+  async sendPasswordResetEmail(
+    userEmail: string,
+    username: string,
+    url: string,
+  ) {
     try {
       await this.mailerService.sendMail({
         to: userEmail,
         subject: 'DevLinks: Password Reset',
         template: './passwordReset', // `.hbs` extension is appended automatically
         context: {
+          username,
           url,
         },
       });
@@ -22,13 +27,18 @@ export class MailService {
   }
 
   // email confirmation
-  async sendConfirmationEmail(userEmail: string, url: string) {
+  async sendConfirmationEmail(
+    userEmail: string,
+    username: string,
+    url: string,
+  ) {
     try {
       await this.mailerService.sendMail({
         to: userEmail,
         subject: 'DevLinks: Confirm your email',
         template: './confirmEmail', // `.hbs` extension is appended automatically
         context: {
+          username,
           url,
         },
       });

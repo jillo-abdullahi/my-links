@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Patch, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { GetProfileDTO, UpdateProfileDTO } from './dto';
 import { JwtGuard } from '../auth/guard';
@@ -8,9 +16,9 @@ import { JwtGuard } from '../auth/guard';
 export class ProfileController {
   constructor(private profileService: ProfileService) {}
 
-  @Get()
-  getProfile(@Body() body: GetProfileDTO) {
-    return this.profileService.getProfile(body);
+  @Get(':username')
+  getProfile(@Param() user: GetProfileDTO) {
+    return this.profileService.getProfile(user);
   }
 
   @Patch()
