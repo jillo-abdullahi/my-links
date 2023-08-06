@@ -27,3 +27,15 @@ export class CheckUsernameDTO {
   @IsString()
   username: string;
 }
+
+export class ForgotPwdDTO {
+  @IsString()
+  @IsNotEmpty()
+  email: string;
+}
+
+export class ResetPwdDTO {
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+}

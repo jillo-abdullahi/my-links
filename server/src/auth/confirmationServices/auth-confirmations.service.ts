@@ -6,10 +6,10 @@ import {
 } from '@nestjs/common';
 import * as argon from 'argon2';
 import { ConfigService } from '@nestjs/config';
-import { JwtAuthService } from '../auth/jwtUtils/jwtUtils.service';
-import { MailService } from '../mail/mail.service';
-import { PrismaService } from '../prisma/prisma.service';
-import { ForgotPwdDTO, ResetPwdDTO } from './dto';
+import { JwtAuthService } from '../jwtUtils/jwtUtils.service';
+import { MailService } from '../../mail/mail.service';
+import { PrismaService } from '../../prisma/prisma.service';
+import { ForgotPwdDTO, ResetPwdDTO } from '../dto';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()

@@ -118,14 +118,7 @@ export class AuthService {
           },
         });
       } catch (error) {
-        if (error instanceof PrismaClientKnownRequestError) {
-          if (error.code !== 'P2014') throw error;
-          throw new ForbiddenException(
-            'Confirmation token already exists for this user',
-          );
-        } else {
-          throw error;
-        }
+        throw new Error(`Error saving confirmation token: ${error.message}`);
       }
 
       // send confirmation email
