@@ -97,7 +97,7 @@ export class AuthConfirmationsService {
     });
 
     if (!user) {
-      throw new NotFoundException('Email not found');
+      throw new NotFoundException('User not found');
     }
 
     // generate reset token
