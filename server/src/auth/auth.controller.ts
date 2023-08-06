@@ -74,7 +74,7 @@ export class AuthController {
     description: 'Username exists or does not exist.',
   })
   @ApiResponse({ status: 500, description: 'Internal server error.' })
-  @Get('/check-username')
+  @Post('/check-username')
   async checkUsername(@Body() body: CheckUsernameDTO) {
     return this.authService.checkUsername(body);
   }
