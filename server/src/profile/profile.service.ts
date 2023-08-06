@@ -34,13 +34,12 @@ export class ProfileService {
   }
 
   // update user profile
-  async updateProfile(body: UpdateProfileDTO, req: any) {
+  async updateProfile(body: UpdateProfileDTO, loggedInUserId: string) {
     const { userId } = body;
 
     // only allow user to update their own profile
     // we're using the userId from the decoded jwt token
     // see validate() method in /auth/strategy/jwt.strategy.ts
-    const loggedInUserId = req.user.sub;
     if (loggedInUserId !== userId) {
       throw new UnauthorizedException(
         'You are not authorized to update this profile',

@@ -12,12 +12,31 @@ async function bootstrap() {
     .setDescription(
       'An API for developers to consolidate and share their links.',
     )
+    .addBearerAuth(undefined, 'access-token')
     .setVersion('1.0')
     .addTag('nestjs, api, links, developers, postgresql, prisma')
     .build();
 
+  const options = {
+    swaggerOptions: {
+      authAction: {
+        'access-token': {
+          name: 'access-token',
+          schema: {
+            description: 'Default',
+            type: 'http',
+            in: 'header',
+            scheme: 'bearer',
+            bearerFormat: 'JWT',
+          },
+          value: 'thisIsASampleBearerAuthToken123',
+        },
+      },
+    },
+  };
+
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api', app, document, options);
 
   // use pipe validation globally
   // use whitelist to remove unwanted properties
