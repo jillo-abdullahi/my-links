@@ -1,21 +1,8 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Patch,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Param, Patch, Req, UseGuards } from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { GetProfileDTO, UpdateProfileDTO } from './dto';
 import { JwtGuard } from '../auth/guard';
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiHeader,
-  ApiResponse,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiResponse } from '@nestjs/swagger';
 
 @Controller('profile')
 export class ProfileController {
@@ -55,12 +42,11 @@ export class ProfileController {
     status: 500,
     description: 'Internal server error',
   })
-  @UseGuards(JwtGuard)
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer <access_token>',
-    required: true,
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request error: Check the request body',
   })
+  @UseGuards(JwtGuard)
   @ApiBearerAuth('access-token')
   @ApiBody({
     type: UpdateProfileDTO,

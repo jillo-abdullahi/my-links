@@ -47,7 +47,7 @@ export class UpdateProfileDTO {
 
   @IsString()
   @IsOptional()
-  twitterLink?: string;
+  xLink?: string;
 
   @IsString()
   @IsOptional()
@@ -56,6 +56,30 @@ export class UpdateProfileDTO {
   @IsString()
   @IsOptional()
   instagramLink?: string;
+
+  @IsString()
+  @IsOptional()
+  devToLink?: string;
+
+  @IsString()
+  @IsOptional()
+  codeWarsLink?: string;
+
+  @IsString()
+  @IsOptional()
+  freeCodeCampLink?: string;
+
+  @IsString()
+  @IsOptional()
+  mediumLink?: string;
+
+  @IsString()
+  @IsOptional()
+  stackoverflowLink?: string;
+
+  @IsString()
+  @IsOptional()
+  threadsLink?: string;
 }
 
 export class GetProfileDTO {

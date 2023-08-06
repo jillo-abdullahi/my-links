@@ -2,10 +2,12 @@ import {
   Injectable,
   NotFoundException,
   UnauthorizedException,
+  BadRequestException,
   Param,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GetProfileDTO, UpdateProfileDTO } from './dto';
+import { PrismaClientValidationError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class ProfileService {
@@ -47,6 +49,7 @@ export class ProfileService {
     }
 
     try {
+      delete body.userId;
       const profile = await this.prisma.profile.update({
         where: {
           userId,
@@ -56,7 +59,11 @@ export class ProfileService {
 
       return profile;
     } catch (error) {
-      throw new Error(`Error updating profile: ${error.message}`);
+      const errorMessageText = `Error updating profile: ${error.message}`;
+      if (error instanceof PrismaClientValidationError) {
+        throw new BadRequestException(errorMessageText);
+      }
+      throw new Error(errorMessageText);
     }
   }
 }
