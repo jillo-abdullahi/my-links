@@ -9,6 +9,9 @@
                 <div v-else-if="name === 'password'">
                     <PasswordIcon />
                 </div>
+                <div v-else-if="name === 'username'">
+                    <AtSymbolIcon />
+                </div>
             </div>
             <input :type="type" :name="name" :id="id"
                 class="block w-full rounded-md border-0 py-2.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -21,10 +24,11 @@
 import { Component } from 'vue';
 import EmailIcon from '@/assets/icons/EmailIcon.vue';
 import PasswordIcon from '@/assets/icons/PasswordIcon.vue';
+import AtSymbolIcon from '@/assets/icons/AtSymbolIcon.vue';
 
 export default {
     name: 'InputField',
-    components: { EmailIcon, PasswordIcon },
+    components: { EmailIcon, PasswordIcon, AtSymbolIcon },
     props: {
         icon: {
             type: Object as () => Component,
