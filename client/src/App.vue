@@ -22,6 +22,8 @@ export default defineComponent({
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  background-color: #FAFAFA;
+  width: 100vw;
+  height: 100vh;
 }
 </style>
