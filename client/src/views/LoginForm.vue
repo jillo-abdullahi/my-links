@@ -17,7 +17,7 @@
                 <ButtonPrimary text="Login" />
                 <div class="flex items-center justify-center font-light text-sm space-x-1">
                     <span>Don’t have an account?</span>
-                    <a href="#" class="text-indigo-600 hover:text-indigo-700 text-sm font-medium">Create an account</a>
+                    <router-link to="/signup" class="text-indigo-600 hover:text-indigo-700 text-sm font-medium">Create an account</router-link>
                 </div>
 
             </div>

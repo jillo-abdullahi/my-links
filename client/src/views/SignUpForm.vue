@@ -22,7 +22,7 @@
                 <ButtonPrimary text="Login" />
                 <div class="flex items-center justify-center font-light text-sm space-x-1">
                     <span>Already have an account?</span>
-                    <a href="#" class="text-indigo-600 hover:text-indigo-700 text-sm font-medium">Login</a>
+                    <router-link to="/" class="text-indigo-600 hover:text-indigo-700 text-sm font-medium">Login</router-link>
                 </div>
 
             </div>

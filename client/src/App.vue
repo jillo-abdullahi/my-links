@@ -1,20 +1,13 @@
 <template>
-  <!-- <LoginForm /> -->
-  <SignUpForm />
+  <router-view></router-view>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import LoginForm from "@/containers/LoginForm.vue";
-import SignUpForm from "@/containers/SignUpForm.vue";
 
 
 export default defineComponent({
   name: "App",
-  components: {
-    // LoginForm,
-    SignUpForm
-  },
 });
 </script>
 
@@ -29,6 +22,6 @@ export default defineComponent({
   min-height: 100vh;
   padding-bottom: 48px;
   padding-top: 48px;
-  
+
 }
 </style>
