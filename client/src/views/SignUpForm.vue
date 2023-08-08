@@ -10,19 +10,23 @@
                 <p class="text-gray-600 mt-2">Let’s get you started with sharing your links!.</p>
             </div>
             <div class="space-y-6">
-                <InputField type="username" name="username" id="username" placeholder="e.g. shrewdTurtle"
-                    :icon="AtSymbolIcon" label="Username" />
-                <InputField type="email" name="email" id="email" placeholder="e.g. alex@email.com" :icon="EmailIcon"
-                    label="Email address" />
-                <InputField type="password" name="password" id="password" placeholder="At least 8 characters"
-                    :icon="PasswordIcon" label="Password" />
+                <form class="space-y-6">
+                    <InputField type="username" name="username" id="username" placeholder="e.g. shrewdTurtle"
+                        :icon="AtSymbolIcon" label="Username" />
+                    <InputField type="email" name="email" id="email" placeholder="e.g. alex@email.com" :icon="EmailIcon"
+                        label="Email address" />
+                    <InputField type="password" name="password" id="password" placeholder="At least 8 characters"
+                        :icon="PasswordIcon" label="Password" />
 
-                <InputField type="password" name="password" id="password" placeholder="At least 8 characters"
-                    :icon="PasswordIcon" label="Confirm password" />
-                <ButtonPrimary text="Login" />
+                    <InputField type="password" name="password" id="password" placeholder="At least 8 characters"
+                        :icon="PasswordIcon" label="Confirm password" />
+                    <ButtonPrimary text="Login" />
+                </form>
+
                 <div class="flex items-center justify-center font-light text-sm space-x-1">
                     <span>Already have an account?</span>
-                    <router-link to="/" class="text-indigo-600 hover:text-indigo-700 text-sm font-medium">Login</router-link>
+                    <router-link to="/"
+                        class="text-indigo-600 hover:text-indigo-700 text-sm font-medium">Login</router-link>
                 </div>
 
             </div>
