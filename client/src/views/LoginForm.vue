@@ -10,11 +10,11 @@
                 <p class="text-gray-600 mt-2">Add your details below to get back into the app.</p>
             </div>
             <div class="space-y-6 mb-2">
-                <form class="space-y-6">
+                <form class="space-y-6" @submit.prevent="submitForm">
                     <InputField type="email" name="email" id="email" placeholder="Enter your email" :icon="EmailIcon"
-                        label="Email address" />
+                        label="Email address" :value="email" @input="setValue" />
                     <InputField type="password" name="password" id="password" placeholder="Enter your password"
-                        :icon="PasswordIcon" label="Password" />
+                        :icon="PasswordIcon" label="Password" :value="password" @input="setValue" />
                     <ButtonPrimary text="Login" />
                 </form>
 
@@ -51,8 +51,27 @@ export default {
         return {
             EmailIcon,
             PasswordIcon,
-
+            email: '',
+            password: ''
         }
+    },
+    methods: {
+        submitForm() {
+            console.log('Form submitted', this.email, this.password);
+
+            // api call to login
+        },
+        setValue(event: InputEvent) {
+            const name = (event.target as HTMLInputElement).name;
+            const value = (event.target as HTMLInputElement).value;
+
+            if (name === 'email') {
+                this.email = value;
+            } else if (name === 'password') {
+                this.password = value;
+            }
+        },
+
     }
 };
 </script>
