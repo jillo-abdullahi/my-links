@@ -11,7 +11,7 @@
             </div>
             <div class="space-y-6">
                 <form class="space-y-6" @submit.prevent="submitForm">
-                    <InputField type="username" name="username" id="username" placeholder="e.g. shrewdTurtle"
+                    <InputField type="text" name="username" id="username" placeholder="e.g. shrewdTurtle"
                         label="Username" @input="setValue" :error="error.username" />
 
                     <InputField type="email" name="email" id="email" placeholder="e.g. alex@email.com" label="Email address"
