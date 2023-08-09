@@ -99,7 +99,7 @@ export default defineComponent({
     },
     computed: {
         enablePasswordVisibilityToggle(): boolean {
-            return (this.name === 'password' || this.name === 'confirmPassword') && this.value.length > 0;
+            return this.isPasswordField && this.value.length > 0;
         },
         isPasswordField(): boolean {
             return this.name === 'password' || this.name === 'confirmPassword';
