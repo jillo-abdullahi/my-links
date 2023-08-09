@@ -34,13 +34,14 @@
 </template>
   
 <script lang="ts">
+import { defineComponent } from "vue";
 import InputField from "../components/InputField.vue";
 import EmailIcon from "../assets/icons/EmailIcon.vue";
 import PasswordIcon from "../assets/icons/PasswordIcon.vue";
 import ButtonPrimary from "../components/ButtonPrimary.vue";
 import LogoImage from "../components/LogoImage.vue";
 
-export default {
+export default defineComponent({
     name: "LoginForm",
     components: {
         InputField,
@@ -73,7 +74,7 @@ export default {
         },
 
     }
-};
+});
 </script>
   
 

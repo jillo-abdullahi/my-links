@@ -20,7 +20,7 @@
 
                     <InputField type="password" name="password" id="password" placeholder="At least 8 characters"
                         :icon="PasswordIcon" label="Confirm password" />
-                    <ButtonPrimary text="Login" />
+                    <ButtonPrimary text="Create new account" />
                 </form>
 
                 <div class="flex items-center justify-center font-light text-sm space-x-1">

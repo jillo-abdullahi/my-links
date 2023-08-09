@@ -31,24 +31,39 @@
 </template>
   
 <script lang="ts">
+import { defineComponent } from 'vue';
 import EmailIcon from '@/assets/icons/EmailIcon.vue';
 import PasswordIcon from '@/assets/icons/PasswordIcon.vue';
 import AtSymbolIcon from '@/assets/icons/AtSymbolIcon.vue';
 import EyeIcon from '@/assets/icons/EyeIcon.vue';
 import EyeSlashIcon from '@/assets/icons/EyeSlashIcon.vue';
 
-export default {
+export default defineComponent({
     name: 'InputField',
     components: { EmailIcon, PasswordIcon, AtSymbolIcon, EyeIcon, EyeSlashIcon },
     props: {
-        placeholder: String,
+        placeholder: {
+            type: String,
+            default: 'text'
+        },
         type: {
             type: String,
             default: 'text'
         },
-        name: String,
-        id: String,
-        label: String,    },
+        name: {
+            type: String,
+            default: 'text'
+        },
+        id: {
+            type: String,
+            default: 'text'
+        },
+        label: {
+            type: String,
+            default: 'text'
+        },
+    },
+
     data(): { value: string, inputType: string } {
         return {
             value: '',
@@ -56,20 +71,22 @@ export default {
         }
     },
     methods: {
-        togglePasswordVisibility() {
+        togglePasswordVisibility(): void {
             if (this.inputType === 'password') {
                 this.inputType = "text";
             } else {
                 this.inputType = 'password';
             }
+
+            return;
         }
     },
     computed: {
-        enablePasswordVisibilityToggle() {
+        enablePasswordVisibilityToggle(): boolean {
             return this.name === 'password' && this.value.length > 0;
         }
     }
 
 
-}
+});
 </script>
