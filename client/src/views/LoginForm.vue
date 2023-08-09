@@ -11,11 +11,11 @@
             </div>
             <div class="space-y-6 mb-2">
                 <form class="space-y-6" @submit.prevent="submitForm">
-                    <InputField type="email" name="email" id="email" placeholder="Enter your email" :icon="EmailIcon"
-                        label="Email address" :value="email" @input="setValue" :error="error.email" />
+                    <InputField type="email" name="email" id="email" placeholder="Enter your email" label="Email address"
+                        :value="email" @input="setValue" :error="error.email" />
                     <InputField type="password" name="password" id="password" placeholder="Enter your password"
-                        :icon="PasswordIcon" label="Password" :value="password" @input="setValue" :error="error.password" />
-                    <ButtonPrimary text="Login" :disabled="Boolean(error.email) || Boolean(error.password)" />
+                        label="Password" :value="password" @input="setValue" :error="error.password" />
+                    <ButtonPrimary text="Login" :disabled="disableSubmitButton" />
                 </form>
 
                 <div class="flex items-center justify-center font-light text-sm space-x-1">
@@ -36,8 +36,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import InputField from "../components/InputField.vue";
-import EmailIcon from "../assets/icons/EmailIcon.vue";
-import PasswordIcon from "../assets/icons/PasswordIcon.vue";
 import ButtonPrimary from "../components/ButtonPrimary.vue";
 import LogoImage from "../components/LogoImage.vue";
 
@@ -46,12 +44,10 @@ export default defineComponent({
     components: {
         InputField,
         ButtonPrimary,
-        LogoImage
+        LogoImage,
     },
     data() {
         return {
-            EmailIcon,
-            PasswordIcon,
             email: '',
             password: '',
             error: {
@@ -68,6 +64,12 @@ export default defineComponent({
             this.error.password = ''; // reset password error once user starts typing
         }
     },
+    computed: {
+        disableSubmitButton(): boolean {
+            return Boolean(this.error.email) || Boolean(this.error.password);
+        }
+    },
+
     methods: {
         submitForm() {
             const emptyErrorText = 'Cannot be empty';

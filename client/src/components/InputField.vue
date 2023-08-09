@@ -7,7 +7,7 @@
                 <div v-if="type === 'email'">
                     <EmailIcon />
                 </div>
-                <div v-else-if="name === 'password'">
+                <div v-else-if="name === 'password' || name === 'confirmPassword'">
                     <PasswordIcon />
                 </div>
                 <div v-else-if="name === 'username'">
@@ -19,8 +19,9 @@
                 :class="{ 'border-red-500 border-0 ring-1 focus:ring-red-500 ring-red-500': error, ' focus:ring-indigo-600 border-0 ring-1': !error }"
                 :placeholder="placeholder" v-model="value" @input="$emit('setValue', value)" />
 
-            <button v-if="name === 'password' && !error" class="absolute inset-y-0 right-0 flex items-center pr-3"
-                type="button" :class="{ 'cursor-not-allowed': !enablePasswordVisibilityToggle }"
+            <button v-if="isPasswordField && !error"
+                class="absolute inset-y-0 right-0 flex items-center pr-3" type="button"
+                :class="{ 'cursor-not-allowed': !enablePasswordVisibilityToggle }"
                 :disabled="!enablePasswordVisibilityToggle" @click="togglePasswordVisibility">
                 <div class="h-5 w-5 text-gray-400" v-show="inputType === 'password'">
                     <EyeIcon />
@@ -98,7 +99,10 @@ export default defineComponent({
     },
     computed: {
         enablePasswordVisibilityToggle(): boolean {
-            return this.name === 'password' && this.value.length > 0;
+            return (this.name === 'password' || this.name === 'confirmPassword') && this.value.length > 0;
+        },
+        isPasswordField(): boolean {
+            return this.name === 'password' || this.name === 'confirmPassword';
         }
     }
 
