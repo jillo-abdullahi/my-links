@@ -18,7 +18,7 @@ export default defineComponent({
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  background-color: #FAFAFA;
+  background-color: rgb(241 245 249);
   min-height: 100vh;
   padding-bottom: 48px;
   padding-top: 48px;
