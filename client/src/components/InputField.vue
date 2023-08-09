@@ -19,8 +19,7 @@
                 :class="{ 'border-red-500 border-0 ring-1 focus:ring-red-500 ring-red-500': error, ' focus:ring-indigo-600 border-0 ring-1': !error }"
                 :placeholder="placeholder" v-model="value" @input="$emit('setValue', value)" />
 
-            <button v-if="isPasswordField && !error"
-                class="absolute inset-y-0 right-0 flex items-center pr-3" type="button"
+            <button v-if="isPasswordField" class="absolute inset-y-0 right-0 flex items-center pr-3" type="button"
                 :class="{ 'cursor-not-allowed': !enablePasswordVisibilityToggle }"
                 :disabled="!enablePasswordVisibilityToggle" @click="togglePasswordVisibility">
                 <div class="h-5 w-5 text-gray-400" v-show="inputType === 'password'">
@@ -30,9 +29,10 @@
                     <EyeSlashIcon />
                 </div>
             </button>
-            <div v-if="error" class="absolute text-xs text-red-500 inset-y-0 right-0 flex items-center pr-3">
-                <span>{{ error }}</span>
-            </div>
+
+        </div>
+        <div v-if="error" class="text-xs text-red-500 flex items-center pt-1">
+            <span>{{ error }}</span>
         </div>
     </div>
 </template>

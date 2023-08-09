@@ -11,8 +11,8 @@
             </div>
             <div class="space-y-6">
                 <form class="space-y-6" @submit.prevent="submitForm">
-                    <InputField type="text" name="username" id="username" placeholder="e.g. shrewdTurtle"
-                        label="Username" @input="setValue" :error="error.username" />
+                    <InputField type="text" name="username" id="username" placeholder="e.g. shrewdTurtle" label="Username"
+                        @input="setValue" :error="error.username" />
 
                     <InputField type="email" name="email" id="email" placeholder="e.g. alex@email.com" label="Email address"
                         @input="setValue" :error="error.email" />
@@ -94,6 +94,12 @@ export default defineComponent({
 
             if (!this.username) {
                 this.error.username = emptyErrorText;
+            } else if (this.username.length > 20) {
+                this.error.username = 'Username must be less than 20 characters';
+            } else if (this.username.length < 3) {
+                this.error.username = 'Username must be at least 3 characters';
+            } else if (!/^[a-zA-Z0-9_]+$/.test(this.username)) {
+                this.error.username = 'Username can only contain letters, numbers and underscores';
             } else {
                 this.error.username = '';
             }
@@ -107,9 +113,9 @@ export default defineComponent({
             if (!this.password) {
                 this.error.password = emptyErrorText;
             } else if (this.password.length < 8) {
-                this.error.password = 'at least 8 characters';
+                this.error.password = 'Password must be at least 8 characters';
             } else if (this.confirmPassword !== this.password) {
-                this.error.password = 'passwords do not match';
+                this.error.password = 'Passwords do not match';
             } else {
                 this.error.password = '';
             }
@@ -117,7 +123,7 @@ export default defineComponent({
             if (!this.confirmPassword) {
                 this.error.confirmPassword = emptyErrorText;
             } else if (this.confirmPassword.length < 8) {
-                this.error.confirmPassword = 'at least 8 characters';
+                this.error.confirmPassword = 'Password must be at least 8 characters';
             } else if (this.confirmPassword !== this.password) {
                 this.error.confirmPassword = 'passwords do not match';
             } else {

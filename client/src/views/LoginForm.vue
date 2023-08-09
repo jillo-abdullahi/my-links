@@ -83,7 +83,7 @@ export default defineComponent({
             if (!this.password) {
                 this.error.password = emptyErrorText;
             } else if (this.password.length < 8) {
-                this.error.password = 'at least 8 characters';
+                this.error.password = 'Password must be at least 8 characters';
             } else {
                 this.error.password = '';
             }
