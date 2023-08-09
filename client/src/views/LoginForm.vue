@@ -12,10 +12,10 @@
             <div class="space-y-6 mb-2">
                 <form class="space-y-6" @submit.prevent="submitForm">
                     <InputField type="email" name="email" id="email" placeholder="Enter your email" :icon="EmailIcon"
-                        label="Email address" :value="email" @input="setValue" />
+                        label="Email address" :value="email" @input="setValue" :error="error.email" />
                     <InputField type="password" name="password" id="password" placeholder="Enter your password"
-                        :icon="PasswordIcon" label="Password" :value="password" @input="setValue" />
-                    <ButtonPrimary text="Login" />
+                        :icon="PasswordIcon" label="Password" :value="password" @input="setValue" :error="error.password" />
+                    <ButtonPrimary text="Login" :disabled="Boolean(error.email) || Boolean(error.password)" />
                 </form>
 
                 <div class="flex items-center justify-center font-light text-sm space-x-1">
@@ -53,11 +53,42 @@ export default defineComponent({
             EmailIcon,
             PasswordIcon,
             email: '',
-            password: ''
+            password: '',
+            error: {
+                email: '',
+                password: ''
+            }
+        }
+    },
+    watch: {
+        email() {
+            this.error.email = ''; // reset email error once user starts typing
+        },
+        password() {
+            this.error.password = ''; // reset password error once user starts typing
         }
     },
     methods: {
         submitForm() {
+            const emptyErrorText = 'Cannot be empty';
+
+            if (!this.email) {
+                this.error.email = emptyErrorText;
+            } else {
+                this.error.email = '';
+            }
+
+            if (!this.password) {
+                this.error.password = emptyErrorText;
+            } else if (this.password.length < 8) {
+                this.error.password = 'at least 8 characters';
+            } else {
+                this.error.password = '';
+            }
+
+            if (this.error.email || this.error.password) {
+                return;
+            }
             console.log('Form submitted', this.email, this.password);
 
             // api call to login
