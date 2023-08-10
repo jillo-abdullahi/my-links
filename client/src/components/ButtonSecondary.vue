@@ -1,6 +1,7 @@
 <template>
     <button
-        class="text-purple-700 border-2 border-purple-700 font-bold py-2 px-4 rounded-lg  cursor-pointer bg-transparent hover:bg-purple-300">
+        class="text-purple-700 border-2 border-purple-700 font-bold py-2 px-4 rounded-lg  cursor-pointer bg-transparent hover:bg-purple-300"
+        :class="{ 'w-full': !isInsideNav }">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"
             :class="{ 'sm:hidden block': isInsideNav, 'hidden': !isInsideNav }">
             <path

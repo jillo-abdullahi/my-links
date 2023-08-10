@@ -1,5 +1,5 @@
 <template>
-    <div class="relative p-4 bg-white rounded-lg flex items-start justify-center">
+    <div class="relative p-10 bg-white rounded-lg flex items-start justify-center h-[720px]">
         <div class="mx-auto mt-0">
             <svg xmlns="http://www.w3.org/2000/svg" width="308" height="632" viewBox="0 0 308 632" fill="none">
                 <path
