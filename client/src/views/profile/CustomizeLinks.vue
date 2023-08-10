@@ -6,7 +6,7 @@
             </h2>
         </div>
         <div class="w-full mt-10">
-            <ButtonSecondary text="+ Add new link" :is-inside-nav="false" />
+            <ButtonSecondary text="+ Add new link" :is-inside-nav="false" @button-clicked="addNewLink" />
         </div>
         <div class="mt-10 rounded-lg bg-gray-100 flex flex-col items-center justify-center py-10">
             <LinksEmptyStateIcon />
@@ -14,7 +14,8 @@
                 Let’s get you started
             </div>
             <div class="text-base text-gray-400 pt-6 w-full max-w-lg">
-                Use the “Add new link” button to get started. Once you have more than one link, you can reorder and edit them. We’re here to help you share your profiles with everyone!
+                Use the “Add new link” button to get started. Once you have more than one link, you can reorder and edit
+                them. We’re here to help you share your profiles with everyone!
             </div>
         </div>
 
@@ -32,5 +33,29 @@ export default defineComponent({
         ButtonSecondary,
         LinksEmptyStateIcon
     },
+    data() {
+        return {
+            links: [
+                {
+                    id: 1,
+                    name: "Twitter",
+                    url: "https://twitter.com/alexandrudanpop",
+                },
+
+            ]
+        }
+
+    },
+    methods: {
+        addNewLink(): void {
+            this.links.push({
+                id: this.links.length + 1,
+                name: "",
+                url: "",
+            });
+
+            console.log(this.links)
+        }
+    }
 });
 </script>
