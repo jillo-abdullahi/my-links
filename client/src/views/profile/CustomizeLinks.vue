@@ -8,8 +8,9 @@
         <div class="w-full mt-10">
             <ButtonSecondary text="+ Add new link" :is-inside-nav="false" @button-clicked="addNewLink" />
         </div>
-        <div class="mt-10 rounded-lg bg-gray-100 flex flex-col items-center justify-center py-10">
+        <div v-if="links.length < 1" class="mt-10 rounded-lg bg-gray-100 flex flex-col items-center justify-center py-10">
             <LinksEmptyStateIcon />
+
             <div class="mt-10 text-3xl font-bold text-gray-700">
                 Let’s get you started
             </div>
@@ -18,6 +19,11 @@
                 them. We’re here to help you share your profiles with everyone!
             </div>
         </div>
+        <div v-else class="mt-10 w-full">
+            <DropdownButton />
+        </div>
+
+
 
     </div>
 </template>
@@ -26,23 +32,19 @@
 import { defineComponent } from "vue";
 import ButtonSecondary from "@/components/ButtonSecondary.vue";
 import LinksEmptyStateIcon from "@/assets/icons/LinksEmptyStateIcon.vue";
+import DropdownButton from "@/components/DropdownButton.vue";
 
 export default defineComponent({
     name: "CustomizeLinks",
     components: {
         ButtonSecondary,
-        LinksEmptyStateIcon
+        LinksEmptyStateIcon,
+        DropdownButton
+
     },
     data() {
         return {
-            links: [
-                {
-                    id: 1,
-                    name: "Twitter",
-                    url: "https://twitter.com/alexandrudanpop",
-                },
-
-            ]
+            links: [] as { id: number, name: string }[]
         }
 
     },
@@ -51,7 +53,6 @@ export default defineComponent({
             this.links.push({
                 id: this.links.length + 1,
                 name: "",
-                url: "",
             });
 
             console.log(this.links)
