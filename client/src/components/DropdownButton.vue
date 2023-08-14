@@ -1,11 +1,26 @@
 <template>
-    <Menu as="div" class="relative inline-block text-left">
+    <Menu as="div" class="relative inline-block text-left w-full">
         <div>
             <MenuButton
-                class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                class="dropdown inline-flex w-full justify-between rounded-md bg-white px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 "
                 @click="toggleDropdown">
-                Options
-                <ChevronDownIcon class="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
+                <div class="flex items-center justify-center gap-x-2">
+                    <component :is="dropDownItems[selectedOptionIndex].icon"
+                        class="h-4 w-4 text-gray-400 group-hover:fill-purple-700" aria-hidden="true" fill="#737373">
+                    </component>
+                    <div class="font-normal">{{ dropDownItems[selectedOptionIndex].name }}</div>
+                </div>
+
+                <div>
+                    <div v-if="!showDropdown">
+                        <ChevronDownIcon class="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
+                    </div>
+                    <div v-else-if="showDropdown">
+                        <ChevronUpIcon class="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
+                    </div>
+                </div>
+
+
             </MenuButton>
         </div>
 
@@ -14,10 +29,10 @@
             leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95"
             v-show="showDropdown">
             <MenuItems
-                class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                <div class="py-1" v-for="(item, index) in dropDownItems" :key="index">
+                class="w-full absolute right-0 z-10 mt-2 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <div class="py-1 w-full" v-for="(item, index) in dropDownItems" :key="index">
                     <MenuItem>
-                    <button :class="['group flex items-center px-4 py-2 text-sm']">
+                    <button class="group flex items-center px-4 py-2 text-sm w-full" @click="setSelectedOption(index)">
                         <component :is="item.icon" class="mr-3 h-5 w-5 text-gray-400 group-hover:fill-purple-700"
                             aria-hidden="true" fill="#737373"></component>
                         {{ item.name }}
@@ -34,6 +49,8 @@ import { defineComponent } from 'vue'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import {
     ChevronDownIcon,
+    ChevronUpIcon,
+    LinkIcon
 } from '@heroicons/vue/20/solid'
 import GithubIcon from '@/assets/brandIcons/GithubIcon.vue'
 import CodePenIcon from '@/assets/brandIcons/CodePenIcon.vue'
@@ -59,12 +76,14 @@ export default defineComponent({
         MenuItem,
         MenuItems,
         ChevronDownIcon,
-
+        ChevronUpIcon,
+        LinkIcon,
     },
 
     data() {
         return {
             showDropdown: false,
+            selectedOptionIndex: 0,
             dropDownItems: [
                 {
                     name: 'Github',
@@ -131,10 +150,26 @@ export default defineComponent({
     methods: {
         toggleDropdown() {
             this.showDropdown = !this.showDropdown
+        },
+        setSelectedOption(index: number) {
+            this.selectedOptionIndex = index
+
+            // close dropdown
+            this.showDropdown = false
         }
     }
 
 })
-
-
 </script>
+
+<style scoped>
+button.dropdown {
+    border-radius: 0.5rem;
+    border: 1px solid var(--purple, #633CFF);
+    background: var(--white, #FFF);
+}
+
+button.dropdown:active, button.dropdown:hover {
+    box-shadow: 0px 0px 32px 0px rgba(99, 60, 255, 0.25);
+}
+</style>
