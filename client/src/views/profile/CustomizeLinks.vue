@@ -8,6 +8,9 @@
         <div class="w-full mt-10">
             <ButtonSecondary text="+ Add new link" :is-inside-nav="false" @button-clicked="addNewLink" />
         </div>
+        <div class="mt-10 w-full">
+            <DropdownButton />
+        </div>
         <div v-if="links.length < 1" class="mt-10 rounded-lg bg-gray-100 flex flex-col items-center justify-center py-10">
             <LinksEmptyStateIcon />
 
@@ -22,6 +25,7 @@
         <div v-else class="mt-10 w-full">
             <DropdownButton />
         </div>
+        
 
 
 

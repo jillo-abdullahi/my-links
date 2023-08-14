@@ -10,11 +10,5 @@
 <script lang="ts">
 export default {
     name: 'FrontendMentorIcon',
-    props: {
-        fill: {
-            type: String,
-            default: '#ffffff'
-        }
-    }
 }
 </script>

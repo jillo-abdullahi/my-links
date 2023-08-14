@@ -33,9 +33,10 @@
                 <div class="py-1 w-full" v-for="(item, index) in dropDownItems" :key="index">
                     <MenuItem>
                     <button class="group flex items-center px-4 py-2 text-sm w-full" @click="setSelectedOption(index)">
-                        <component :is="item.icon" class="mr-3 h-5 w-5 text-gray-400 group-hover:fill-purple-700"
-                            aria-hidden="true" fill="#737373"></component>
-                        {{ item.name }}
+                        <component :is="item.icon"
+                            class="mr-3 h-5 w-5 text-gray-400 fill-gray-500 group-hover:fill-purple-700" aria-hidden="true">
+                        </component>
+                        <div class="group-hover:text-purple-700">{{ item.name }}</div>
                     </button>
                     </MenuItem>
                 </div>
@@ -43,7 +44,9 @@
         </transition>
     </Menu>
 </template>
-  
+
+
+
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
@@ -169,7 +172,8 @@ button.dropdown {
     background: var(--white, #FFF);
 }
 
-button.dropdown:active, button.dropdown:hover {
+button.dropdown:active,
+button.dropdown:hover {
     box-shadow: 0px 0px 32px 0px rgba(99, 60, 255, 0.25);
 }
 </style>
