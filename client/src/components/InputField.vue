@@ -13,6 +13,9 @@
                 <div v-else-if="name === 'username'">
                     <AtSymbolIcon />
                 </div>
+                <div v-else-if="name === 'link-selector'">
+                    <LinkIcon class="text-gray-400 w-4 h-4" />
+                </div>
             </div>
             <input :type="inputType" :name="name" :id="id"
                 class="block w-full rounded-md py-2.5 pl-10 text-gray-900 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6 focus:ring-2 focus:ring-inset"
@@ -39,6 +42,9 @@
   
 <script lang="ts">
 import { defineComponent } from 'vue';
+import {
+    LinkIcon
+} from '@heroicons/vue/20/solid'
 import EmailIcon from '@/assets/icons/EmailIcon.vue';
 import PasswordIcon from '@/assets/icons/PasswordIcon.vue';
 import AtSymbolIcon from '@/assets/icons/AtSymbolIcon.vue';
@@ -47,7 +53,7 @@ import EyeSlashIcon from '@/assets/icons/EyeSlashIcon.vue';
 
 export default defineComponent({
     name: 'InputField',
-    components: { EmailIcon, PasswordIcon, AtSymbolIcon, EyeIcon, EyeSlashIcon },
+    components: { EmailIcon, PasswordIcon, AtSymbolIcon, EyeIcon, EyeSlashIcon, LinkIcon },
     props: {
         placeholder: {
             type: String,

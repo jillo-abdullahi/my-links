@@ -22,7 +22,7 @@ module.exports = {
           100: "#FAFAFA",
         },
         red: {
-          PRIMARY: "#FF0000",
+          700: "#FF0000",
         },
       },
     },
