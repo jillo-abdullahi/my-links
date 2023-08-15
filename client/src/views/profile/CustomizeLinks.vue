@@ -74,7 +74,7 @@ export default defineComponent({
     watch: {
         links: {
             handler() {
-                console.log('this is the links array', this.links)
+                console.log('this is the links array', this.links) // TODO remove this
             },
             deep: true
         }
