@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between">
             <button class="flex items-center justify-start gap-x-2">
                 <DragIcon />
-                <div class="text-gray-400">Link #{{ link.id }}</div>
+                <div class="text-gray-400">Link #{{ linkIndex }}</div>
             </button>
             <button class="text-gray-400 hover:text-red-700" @click="removeLink">Remove</button>
         </div>
@@ -36,11 +36,20 @@ export default defineComponent({
         link: {
             type: Object,
             required: true
+        },
+        links: {
+            type: Array,
+            required: true
         }
     },
     data() {
         return {
             linkUrl: this.link.url,
+        }
+    },
+    computed: {
+        linkIndex(): number {
+            return this.links.indexOf(this.link) + 1;
         }
     },
     methods: {

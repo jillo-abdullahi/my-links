@@ -21,7 +21,7 @@
         </div>
         <div v-else class="mt-10 w-full" v-for="(link, index) in links" :key="index">
             <LinkSelector @update-selected="setLinkPlatform" @set-link-value="setLinkUrl" @remove-link="removeLink"
-                :link="link" />
+                :link="link" :links="links" />
         </div>
 
 
