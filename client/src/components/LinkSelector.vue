@@ -5,7 +5,7 @@
                 <DragIcon />
                 <div class="text-gray-400">Link #{{ link.id }}</div>
             </button>
-            <button class="text-gray-400 hover:text-red-700">Remove</button>
+            <button class="text-gray-400 hover:text-red-700" @click="removeLink">Remove</button>
         </div>
         <div>
             <span class="block text-sm font-medium leading-6 mb-2 w-full text-left">Platform</span>
@@ -51,6 +51,9 @@ export default defineComponent({
             this.linkUrl = (event.target as HTMLInputElement).value;
             this.$emit('setLinkValue', this.linkUrl, this.link.id);
         },
+        removeLink() {
+            this.$emit('removeLink', this.link.id);
+        }
     }
 })
 </script>

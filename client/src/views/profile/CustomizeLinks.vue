@@ -20,7 +20,8 @@
             </div>
         </div>
         <div v-else class="mt-10 w-full" v-for="(link, index) in links" :key="index">
-            <LinkSelector @update-selected="setLinkPlatform" @set-link-value="setLinkUrl" :link="link" />
+            <LinkSelector @update-selected="setLinkPlatform" @set-link-value="setLinkUrl" @remove-link="removeLink"
+                :link="link" />
         </div>
 
 
@@ -43,8 +44,6 @@ export default defineComponent({
         LinkSelector
     },
     data() {
-        console.log('this is the links array', this.links)
-
         return {
             links: [{
                 id: 1,
@@ -80,6 +79,9 @@ export default defineComponent({
         },
         setLinkUrl(value: string, linkId: number): void {
             this.links[linkId - 1].url = value;
+        },
+        removeLink(linkId: number): void {
+            this.links = this.links.filter(link => link.id !== linkId);
         }
     }
 });
