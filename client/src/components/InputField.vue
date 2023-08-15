@@ -1,8 +1,8 @@
 <template>
     <div class="flex flex-col items-start justify-center w-full">
-        <label :for="name" class="block text-sm font-medium leading-6 "
+        <label :for="name" class="block text-sm font-medium leading-6 pb-2 "
             :class="{ 'text-red-500': error, 'text-gray-900': !error }">{{ label }}</label>
-        <div class="relative mt-2 rounded-md shadow-sm w-full">
+        <div class="relative rounded-md shadow-sm w-full">
             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                 <div v-if="type === 'email'">
                     <EmailIcon />
@@ -18,7 +18,7 @@
                 </div>
             </div>
             <input :type="inputType" :name="name" :id="id"
-                class="block w-full rounded-md py-2.5 pl-10 text-gray-900 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6 focus:ring-2 focus:ring-inset"
+                class="block w-full rounded-md py-2.5 pl-10 text-gray-900 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6 focus:ring-1 focus:ring-inset"
                 :class="{ 'border-red-500 border-0 ring-1 focus:ring-red-500 ring-red-500': error, ' focus:ring-indigo-600 border-0 ring-1': !error }"
                 :placeholder="placeholder" v-model="value" @input="$emit('setValue')" />
 
@@ -119,3 +119,15 @@ export default defineComponent({
 
 });
 </script>
+<style scoped>
+input {
+    border-radius: 0.5rem;
+    background: var(--white, #FFF);
+}
+
+input:active,
+input:hover {
+    border: 1px solid var(--purple, #633CFF);
+    box-shadow: 0px 0px 32px 0px rgba(99, 60, 255, 0.25);
+}
+</style>
