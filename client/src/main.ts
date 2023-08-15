@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import "./index.css";
 import { createRouter, createWebHistory } from "vue-router";
+import withUUID from "vue-uuid";
 import SignUpForm from "@/views/SignUpForm.vue";
 import LoginForm from "@/views/LoginForm.vue";
 import ForgotPasswordForm from "@/views/ForgotPasswordForm.vue";
@@ -20,4 +21,4 @@ const router = createRouter({
   routes,
 });
 
-createApp(App).use(router).mount("#app");
+withUUID(createApp(App)).use(router).mount("#app");

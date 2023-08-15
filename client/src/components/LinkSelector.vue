@@ -13,7 +13,8 @@
         </div>
         <div>
             <InputField name="link-selector" id="link-selector" type="text" label="Link" :value="linkUrl"
-                @input="updateLinkUrl" placeholder="e.g. https://www.github.com/johnappleseed" :default-value="linkUrl" />
+                @input="updateLinkUrl" placeholder="e.g. https://www.github.com/johnappleseed" :default-value="linkUrl"
+                :error="link.error" />
         </div>
 
     </div>
@@ -34,11 +35,15 @@ export default defineComponent({
     },
     props: {
         link: {
-            type: Object,
+            type: Object, // TODO: fix this type
             required: true
         },
         links: {
-            type: Array,
+            type: Object, // TODO: fix this type
+            required: true
+        },
+        linkIndex: {
+            type: Number,
             required: true
         }
     },
@@ -48,9 +53,7 @@ export default defineComponent({
         }
     },
     computed: {
-        linkIndex(): number {
-            return this.links.indexOf(this.link) + 1;
-        }
+
     },
     methods: {
         updatePlatform(selectedOption: string) {

@@ -10,8 +10,7 @@
             <div class="w-full mt-10">
                 <ButtonSecondary text="+ Add new link" :is-inside-nav="false" @button-clicked="addNewLink" />
             </div>
-            <div v-if="links.length < 1"
-                class="mt-10 rounded-lg bg-gray-100 flex flex-col items-center justify-center py-10">
+            <div v-if="linksEmpty" class="mt-10 rounded-lg bg-gray-100 flex flex-col items-center justify-center py-10">
                 <LinksEmptyStateIcon />
 
                 <div class="mt-10 text-3xl font-bold text-gray-700">
@@ -22,12 +21,12 @@
                     them. We’re here to help you share your profiles with everyone!
                 </div>
             </div>
-            <div v-else class="mt-10 w-full" v-for="(link, index) in links" :key="index">
+            <div v-else class="mt-10 w-full" v-for="(link, key, index) in links" :key="key">
                 <LinkSelector @update-selected="setLinkPlatform" @set-link-value="setLinkUrl" @remove-link="removeLink"
-                    :link="link" :links="links" />
+                    :link="link" :links="links" :linkIndex="index + 1" />
             </div>
         </div>
-        <div class="mt-10 w-full flex items-center justify-end p-6 border-t border-gray-200" v-if="links.length">
+        <div class="mt-10 w-full flex items-center justify-end p-6 border-t border-gray-200" v-if="!linksEmpty">
             <div class="w-fit-content">
                 <ButtonPrimary text="Save" :is-inside-nav="false" :click="submitLinks" @button-clicked="submitLinks" />
             </div>
@@ -37,6 +36,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { uuid } from 'vue-uuid';
 import ButtonSecondary from "@/components/ButtonSecondary.vue";
 import ButtonPrimary from "@/components/ButtonPrimary.vue";
 import LinksEmptyStateIcon from "@/assets/icons/LinksEmptyStateIcon.vue";
@@ -52,12 +52,21 @@ export default defineComponent({
     },
     data() {
         return {
-            links: [{
-                id: 1,
-                platform: "Github",
-                url: "https://vuejs.org/guide/components/events.html#event-arguments",
-            },
-            ] as { id: number, platform: string, url: string }[]
+            links: {
+                ["sdfsdfsdfsdf"]: {
+                    platform: "Github",
+                    url: "https://vuejs.org/guide/components/events.html#event-arguments",
+                    id: "sdfsdfsdfsdf"
+                }
+            } as {
+                [key: string]: {
+                    platform: string,
+                    url: string,
+                    id: string,
+                    error?: string
+                }
+            }
+
         }
 
 
@@ -70,28 +79,59 @@ export default defineComponent({
             deep: true
         }
     },
+    computed: {
+        linksEmpty(): boolean {
+            return Object.keys(this.links).length === 0;
+        }
+    },
     methods: {
         addNewLink(): void {
-            this.links.push({
-                id: this.links.length + 1,
-                platform: "",
+            const linkId = uuid.v4();
+            this.links[linkId] = {
+                platform: "Github",
                 url: "",
-
-            });
+                error: "",
+                id: linkId
+            };
         },
         setLinkPlatform(selectedOption: string, linkId: number): void {
-            // update link platform
-            // subtract 1 from linkId because we're using array length as the id
-            this.links[linkId - 1].platform = selectedOption;
+            // update this link's platform
+            this.links[linkId].platform = selectedOption;
         },
-        setLinkUrl(value: string, linkId: number): void {
-            this.links[linkId - 1].url = value;
+        setLinkUrl(value: string, linkId: string): void {
+            // update the url of the current link 
+            this.links[linkId].url = value;
         },
         removeLink(linkId: number): void {
-            this.links = this.links.filter(link => link.id !== linkId);
+            delete this.links[linkId];
+        },
+
+        validateLink(linkId: string) {
+            const link = this.links[linkId];
+
+            // check if link is empty
+            if (link.url === "") {
+                link.error = "Link can't be empty";
+                return
+            }
+            // check if link is valid
+            try {
+                new URL(link.url);
+            } catch (error) {
+                link.error = "Invalid URL";
+                return
+            }
+
+            link.error = ""
         },
         submitLinks(): void {
             console.log('submitting links', this.links)
+
+            //validate links
+            Object.keys(this.links).forEach(linkId => {
+                this.validateLink(linkId);
+            })
+
         }
     }
 });
