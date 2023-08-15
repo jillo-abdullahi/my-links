@@ -20,7 +20,7 @@
             </div>
         </div>
         <div v-else class="mt-10 w-full" v-for="(link, index) in links" :key="index">
-            <LinkSelector />
+            <LinkSelector @update-selected="setLinkPlatform" @set-link-value="setLinkUrl" :link="link" />
         </div>
 
 
@@ -43,19 +43,43 @@ export default defineComponent({
         LinkSelector
     },
     data() {
+        console.log('this is the links array', this.links)
+
         return {
-            links: [] as { id: number, name: string }[]
+            links: [{
+                id: 1,
+                platform: "Github",
+                url: "https://vuejs.org/guide/components/events.html#event-arguments",
+            },
+            ] as { id: number, platform: string, url: string }[]
         }
 
+
+    },
+    watch: {
+        links: {
+            handler() {
+                console.log('this is the links array', this.links)
+            },
+            deep: true
+        }
     },
     methods: {
         addNewLink(): void {
             this.links.push({
                 id: this.links.length + 1,
-                name: "",
-            });
+                platform: "",
+                url: "",
 
-            console.log(this.links)
+            });
+        },
+        setLinkPlatform(selectedOption: string, linkId: number): void {
+            // update link platform
+            // subtract 1 from linkId because we're using array length as the id
+            this.links[linkId - 1].platform = selectedOption;
+        },
+        setLinkUrl(value: string, linkId: number): void {
+            this.links[linkId - 1].url = value;
         }
     }
 });

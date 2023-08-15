@@ -20,7 +20,7 @@
             <input :type="inputType" :name="name" :id="id"
                 class="block w-full rounded-md py-2.5 pl-10 text-gray-900 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6 focus:ring-2 focus:ring-inset"
                 :class="{ 'border-red-500 border-0 ring-1 focus:ring-red-500 ring-red-500': error, ' focus:ring-indigo-600 border-0 ring-1': !error }"
-                :placeholder="placeholder" v-model="value" @input="$emit('setValue', value)" />
+                :placeholder="placeholder" v-model="value" @input="$emit('setValue')" />
 
             <button v-if="isPasswordField" class="absolute inset-y-0 right-0 flex items-center pr-3" type="button"
                 :class="{ 'cursor-not-allowed': !enablePasswordVisibilityToggle }"
@@ -84,11 +84,15 @@ export default defineComponent({
             type: String,
             default: ''
         },
+        defaultValue: {
+            type: String,
+            default: ''
+        }
     },
 
     data(): { value: string, inputType: string } {
         return {
-            value: '',
+            value: this.defaultValue,
             inputType: this.type, // this is to toggle the password visibility
         }
     },

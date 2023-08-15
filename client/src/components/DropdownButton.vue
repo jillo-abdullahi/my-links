@@ -5,10 +5,10 @@
                 class="dropdown inline-flex w-full justify-between rounded-md bg-white px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 "
                 @click="toggleDropdown">
                 <div class="flex items-center justify-center gap-x-2">
-                    <component :is="dropDownItems[selectedOptionIndex].icon"
-                        class="h-4 w-4 text-gray-400 group-hover:fill-purple-700" aria-hidden="true" fill="#737373">
+                    <component :is="linkIcon" class="h-4 w-4 text-gray-400 group-hover:fill-purple-700" aria-hidden="true"
+                        fill="#737373">
                     </component>
-                    <div class="font-normal">{{ dropDownItems[selectedOptionIndex].name }}</div>
+                    <div class="font-normal">{{ linkPlatform }}</div>
                 </div>
 
                 <div>
@@ -82,7 +82,12 @@ export default defineComponent({
         ChevronUpIcon,
         LinkIcon,
     },
-
+    props: {
+        link: {
+            type: Object,
+            required: true
+        }
+    },
     data() {
         return {
             showDropdown: false,
@@ -148,6 +153,52 @@ export default defineComponent({
                 }
 
             ],
+        }
+    },
+    watch: {
+        selectedOptionIndex() {
+            this.$emit('selected-option-changed', this.dropDownItems[this.selectedOptionIndex].name)
+        }
+    },
+    computed: {
+        // set link icon based on link prop
+        linkIcon() {
+            switch (this.link.platform) {
+                case 'Github':
+                    return GithubIcon
+                case 'Codepen':
+                    return CodePenIcon
+                case 'Twitter':
+                    return TwitterIcon
+                case 'YouTube':
+                    return YouTubeIcon
+                case 'Facebook':
+                    return FacebookIcon
+                case 'Dev.to':
+                    return DevToIcon
+                case 'LinkedIn':
+                    return LinkedInIcon
+                case 'FreeCodeCamp':
+                    return FreeCodeCampIcon
+                case 'Hashnode':
+                    return HashnodeIcon
+                case 'Gitlab':
+                    return GitlabIcon
+                case 'Twitch':
+                    return TwitchIcon
+                case 'Frontend Mentor':
+                    return FrontendMentorIcon
+                case 'CodeWars':
+                    return CodeWarsIcon
+                case 'StackOverFlow':
+                    return StackOverFlowIcon
+                default:
+                    return GithubIcon
+            }
+        },
+        linkPlatform() {
+            if (this.link.platform) return this.link.platform
+            return 'Github'
         }
     },
     methods: {

@@ -3,16 +3,17 @@
         <div class="flex items-center justify-between">
             <button class="flex items-center justify-start gap-x-2">
                 <DragIcon />
-                <div class="text-gray-400">Link #1</div>
+                <div class="text-gray-400">Link #{{ link.id }}</div>
             </button>
             <button class="text-gray-400 hover:text-red-700">Remove</button>
         </div>
         <div>
             <span class="block text-sm font-medium leading-6 mb-2 w-full text-left">Platform</span>
-            <DropdownButton />
+            <DropdownButton @selected-option-changed="updatePlatform" :link="link" />
         </div>
         <div>
-            <InputField name="link-selector" id="link-selector" type="text" label="Link" />
+            <InputField name="link-selector" id="link-selector" type="text" label="Link" :value="linkUrl"
+                @input="updateLinkUrl" placeholder="e.g. https://www.github.com/johnappleseed" :default-value="linkUrl" />
         </div>
 
     </div>
@@ -31,11 +32,25 @@ export default defineComponent({
         InputField,
         DragIcon
     },
+    props: {
+        link: {
+            type: Object,
+            required: true
+        }
+    },
     data() {
-        return { linkUrl: '' }
+        return {
+            linkUrl: this.link.url,
+        }
     },
     methods: {
-
+        updatePlatform(selectedOption: string) {
+            this.$emit('updateSelected', selectedOption, this.link.id);
+        },
+        updateLinkUrl(event: InputEvent) {
+            this.linkUrl = (event.target as HTMLInputElement).value;
+            this.$emit('setLinkValue', this.linkUrl, this.link.id);
+        },
     }
 })
 </script>
