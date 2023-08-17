@@ -1,9 +1,10 @@
 <template>
     <div class="flex flex-col items-start justify-center w-full">
-        <label :for="name" class="block text-sm font-medium leading-6 pb-2 "
-            :class="{ 'text-red-500': error, 'text-gray-900': !error }">{{ label }}</label>
+        <label :for="name" class="text-sm font-medium leading-6 pb-2 "
+            :class="{ 'text-red-500': error, 'text-gray-900': !error, 'block md:hidden': useRowLabel, 'block': !useRowLabel }">{{
+                label }}</label>
         <div class="relative rounded-md shadow-sm w-full">
-            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3" v-if="!hideInputIcon">
                 <div v-if="type === 'email'">
                     <EmailIcon />
                 </div>
@@ -18,9 +19,15 @@
                 </div>
             </div>
             <input :type="inputType" :name="name" :id="id"
-                class="block w-full rounded-md py-2.5 pl-10 text-gray-900 ring-inset ring-gray-300 placeholder:text-gray-400  sm:text-sm sm:leading-6 focus:ring-1 focus:ring-inset"
-                :class="{ 'border-red-500 border-0 ring-1 focus:ring-red-500 ring-red-500': error, ' focus:ring-indigo-600 border-0 ring-1': !error }"
-                :placeholder="placeholder" v-model="value" @input="$emit('setValue')" />
+                class="block border w-full py-2.5 text-gray-900  placeholder:text-gray-400  sm:text-sm sm:leading-6 rounded-lg bg-white"
+                :style="{
+                    boxShadow: error ? 'none' : ''
+                }" :class="{
+    'border-red-500 focus:border-red-500 hover:border-red-500': error,
+    ' focus:border-purple-700 active:border-purple-700 hover:border-purple-700 border-gray-300': !error,
+    'pl-10': !hideInputIcon,
+    'px-4': hideInputIcon
+}" :placeholder="placeholder" v-model="value" @input="$emit('setValue')" />
 
             <button v-if="isPasswordField" class="absolute inset-y-0 right-0 flex items-center pr-3" type="button"
                 :class="{ 'cursor-not-allowed': !enablePasswordVisibilityToggle }"
@@ -87,6 +94,14 @@ export default defineComponent({
         defaultValue: {
             type: String,
             default: ''
+        },
+        useRowLabel: {
+            type: Boolean,
+            default: false
+        },
+        hideInputIcon: {
+            type: Boolean,
+            default: false
         }
     },
 
@@ -120,14 +135,10 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-input {
-    border-radius: 0.5rem;
-    background: var(--white, #FFF);
-}
-
 input:active,
-input:hover {
-    border: 1px solid var(--purple, #633CFF);
+input:hover,
+input:focus {
+    /* adding this here because Tailwind can't give me these specifics */
     box-shadow: 0px 0px 32px 0px rgba(99, 60, 255, 0.25);
 }
 </style>
