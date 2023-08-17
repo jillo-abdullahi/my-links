@@ -17,7 +17,7 @@ export default defineComponent({
         disabled: {
             type: Boolean,
             default: false
-        }
+        },
     },
 });
 </script>
