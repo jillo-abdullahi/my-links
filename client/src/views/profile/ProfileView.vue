@@ -32,8 +32,8 @@ export default defineComponent({
     data() {
         return {
             tabs: [
-                { name: 'Links', current: true },
-                { name: 'Profile', current: false },
+                { name: 'Links', current: false },
+                { name: 'Profile', current: true },
             ] as { name: string, current: boolean }[]
         }
     },

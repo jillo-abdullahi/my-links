@@ -1,6 +1,6 @@
 <template>
     <div class="bg-white rounded-lg min-h-[720px] flex flex-col justify-between items-center">
-        <div class="p-10 w-full ">
+        <div class="p-10 w-full">
             <div class="text-left">
                 <h1 class="text-4xl font-bold text-gray-700 pb-2">Customize your links</h1>
                 <h2 class="text-gray-400 text-base">Add/edit/remove links below and then share all your profiles with the
@@ -28,7 +28,7 @@
         </div>
         <div class="mt-10 w-full flex items-center justify-end p-6 border-t border-gray-200" v-if="!linksEmpty">
             <div class="w-fit-content">
-                <ButtonPrimary text="Save" :is-inside-nav="false" :click="submitLinks" @button-clicked="submitLinks" />
+                <ButtonPrimary text="Save" :is-inside-nav="false" @button-clicked="submitLinks" />
             </div>
         </div>
     </div>
