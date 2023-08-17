@@ -8,8 +8,22 @@
                 </h2>
             </div>
 
-            <div class="rounded-lg bg-gray-100 ">
-                upload photo here
+            <div class="rounded-lg bg-gray-100 space-y-5 mt-10 p-5">
+                <div class="grid w-full grid-cols-12">
+                    <div class="text-gray-400 hidden md:flex items-center justify-start col-span-4">Profile picture</div>
+                    <div class="col-span-12 md:col-span-8">
+                        <div>
+                            <input type="file" id="files" accept="image/*" class="hidden" @change="handleFileUpload">
+                            <label for="files"
+                                class="rounded-lg bg-purple-100 p-10 flex flex-col justify-center items-center space-y-2 cursor-pointer">
+                                <UploadImageIcon />
+                                <p class="text-purple-700 font-bold">+ Upload Image</p>
+                            </label>
+                            <span class=" text-gray-400 text-sm">Image must be below 1024x1024px. Use PNG or JPG
+                                format.</span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="rounded-lg bg-gray-100 p-5 space-y-5 mt-10">
                 <div class="grid w-full grid-cols-12">
@@ -50,12 +64,14 @@
 import { defineComponent } from 'vue';
 import ButtonPrimary from "@/components/ButtonPrimary.vue";
 import InputField from "@/components/InputField.vue";
+import UploadImageIcon from "@/assets/icons/UploadImage.vue"
 
 export default defineComponent({
     name: 'ProfileDetails',
     components: {
         ButtonPrimary,
-        InputField
+        InputField,
+        UploadImageIcon
     },
     data() {
         return {
@@ -97,6 +113,12 @@ export default defineComponent({
             this.profileData[name] = value;
 
         },
+        handleFileUpload(event: Event) {
+            // this.profileData.profileImage = (event.target as HTMLInputElement).files[0]
+            console.log("handle file here")
+
+        }
     }
 })
 </script>
+<style scoped></style>
