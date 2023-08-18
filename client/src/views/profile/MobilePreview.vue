@@ -17,7 +17,12 @@
             <div class="absolute inset-x-0 mx-auto inset-y-0 my-auto">
                 <div class="flex flex-col space-y-8 h-full w-full items-center justify-center">
                     <div class="flex flex-col items-center justify-center space-y-6">
-                        <div class="bg-gray-300 w-24 h-24 rounded-full"></div>
+                        <div class="bg-gray-300 w-24 h-24 rounded-full" :style="{
+                            backgroundImage: `url(${profileImagePreview})`,
+                            backgroundOrigin: 'center center',
+                            backgroundSize: 'cover',
+                            backgroundRepeat: 'no-repeat'
+                        }"></div>
                         <div class="flex flex-col items-center justify-center space-y-3">
                             <div class="bg-gray-300 w-40 h-4 rounded-full"></div>
                             <div class="bg-gray-300 w-28 h-2 rounded-full"></div>
@@ -44,5 +49,11 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
     name: "MobilePreview",
+    props: {
+        profileImagePreview: {
+            type: String,
+            default: ''
+        }
+    }
 });
 </script>

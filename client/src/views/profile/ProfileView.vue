@@ -4,11 +4,11 @@
             <NavBar @change-tabs="setActiveTab" :tabs="tabs" />
             <div class="pt-6 grid grid-cols-12 gap-x-6">
                 <div class="col-span-5">
-                    <MobilePreview />
+                    <MobilePreview :profile-image-preview="profileImagePreview" />
                 </div>
                 <div class="col-span-7">
                     <div v-if="profileTabActive">
-                        <ProfileDetails />
+                        <ProfileDetails @image-preview="getProfileImagePreview" />
                     </div>
                     <div v-else-if="linksTabActive">
                         <CustomizeLinks />
@@ -34,7 +34,8 @@ export default defineComponent({
             tabs: [
                 { name: 'Links', current: false },
                 { name: 'Profile', current: true },
-            ] as { name: string, current: boolean }[]
+            ] as { name: string, current: boolean }[],
+            profileImagePreview: ''
         }
     },
     components: {
@@ -52,7 +53,7 @@ export default defineComponent({
         }
     },
     methods: {
-        setActiveTab(tabIndex: number) {
+        setActiveTab(tabIndex: number): void {
             this.tabs.forEach((tab, index) => {
                 if (index === tabIndex) {
                     tab.current = true;
@@ -60,6 +61,10 @@ export default defineComponent({
                     tab.current = false;
                 }
             })
+        },
+
+        getProfileImagePreview(base64Image: string): void {
+            this.profileImagePreview = base64Image
         }
     },
 });

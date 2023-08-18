@@ -79,12 +79,14 @@ export default defineComponent({
                 firstName: "",
                 lastName: "",
                 email: "",
-                profileImage: "",
+                profileImage: null,
+                previewProfileImage: ''
             } as {
                 firstName: string,
                 lastName: string,
                 email: string,
-                profileImage: string
+                profileImage: File | null,
+                previewProfileImage: string | ArrayBuffer | null
             },
 
             error: {
@@ -114,8 +116,32 @@ export default defineComponent({
 
         },
         handleFileUpload(event: Event) {
-            // this.profileData.profileImage = (event.target as HTMLInputElement).files[0]
-            console.log("handle file here")
+            const target = event.target as HTMLInputElement;
+            if (target && target.files) {
+                this.profileData.profileImage = target.files[0]
+                // upload file to cloudinary once user saves
+
+                // generate base64 string of image for preview purposes
+                // create a new FileReader to read this image and convert to base64 format
+                let reader = new FileReader();
+                // Define a callback function to run, when FileReader finishes its job
+                reader.onload = (e: ProgressEvent<FileReader>) => {
+                    // Note: arrow function used here, so that "this.imageData" refers to the imageData of Vue component
+                    // Read image as base64 and set to imageData
+                    if (e.target) {
+                        this.profileData.previewProfileImage = e.target.result;
+
+                        // emit event to show image preview.
+                        this.$emit("imagePreview", e.target.result);
+                    }
+
+                };
+
+                // Start the reader job - read file as a data url (base64 format)
+                reader.readAsDataURL(target.files[0]);
+            }
+
+            // console.log("handle file here")
 
         }
     }
