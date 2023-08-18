@@ -20,7 +20,7 @@
 
 
         <div class="w-1/3 h-full flex items-center justify-end">
-            <ButtonSecondary text="Preview" :is-inside-nav="true" />
+            <ButtonSecondary text="Preview" :is-inside-nav="true" @button-clicked="goToPreview" />
         </div>
     </div>
 </template>
@@ -57,6 +57,9 @@ export default defineComponent({
     methods: {
         changeTabs(currentTabIndex: number) {
             this.$emit('changeTabs', currentTabIndex)
+        },
+        goToPreview() {
+            this.$router.push({ name: 'profile' });
         }
     }
 
