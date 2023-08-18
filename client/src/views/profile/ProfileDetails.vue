@@ -79,15 +79,13 @@ export default defineComponent({
                 firstName: "",
                 lastName: "",
                 email: "",
-                profileImage: null,
-                previewProfileImage: ''
             } as {
                 firstName: string,
                 lastName: string,
                 email: string,
-                profileImage: File | null,
-                previewProfileImage: string | ArrayBuffer | null
             },
+            profileImage: null as File | null,
+            previewProfileImage: '' as string | ArrayBuffer | null,
 
             error: {
                 email: "",
@@ -104,9 +102,46 @@ export default defineComponent({
             return true;
         }
     },
+
     methods: {
         submitProfile() {
-            console.log('submit profile', this.profileData)
+            console.log('submit profile', this.profileData);
+            if (!this.profileImage) return;
+
+            // save image to cloudinary
+            this.saveImageToCloudinary(this.profileImage);
+
+
+        },
+        async saveImageToCloudinary(imageFile: File) {
+            try {
+                //TODO: store these in .env
+                const UPLOAD_PRESET = 'DevLinks'
+                const CLOUD_NAME = 'dsuhsqcb2'
+
+                const formData = new FormData();
+                formData.append('file', imageFile);
+                formData.append('upload_preset', UPLOAD_PRESET); 
+
+                const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const data = await response.json();
+
+                const secure_url = data.secure_url ? data.secure_url : "";
+
+                if (secure_url) {
+                    // TODO: save to db
+                    this.previewProfileImage = secure_url
+
+                    this.$emit("imagePreview", secure_url);
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                //TODO: handle error here
+            }
         },
         setFormValue(event: InputEvent) {
             const name = (event.target as HTMLInputElement).name as 'firstName' || 'lastName' || 'email';
@@ -118,18 +153,17 @@ export default defineComponent({
         handleFileUpload(event: Event) {
             const target = event.target as HTMLInputElement;
             if (target && target.files) {
-                this.profileData.profileImage = target.files[0]
+                this.profileImage = target.files[0]
                 // upload file to cloudinary once user saves
+                // generate base64 string of image for preview purposes only
 
-                // generate base64 string of image for preview purposes
-                // create a new FileReader to read this image and convert to base64 format
                 let reader = new FileReader();
-                // Define a callback function to run, when FileReader finishes its job
+                // callback function to run, when FileReader finishes its job
                 reader.onload = (e: ProgressEvent<FileReader>) => {
-                    // Note: arrow function used here, so that "this.imageData" refers to the imageData of Vue component
-                    // Read image as base64 and set to imageData
+                    // Note: arrow function used here, so that "this refers to the Vue component
+                    // Read image as base64 and set to previewProfileImage
                     if (e.target) {
-                        this.profileData.previewProfileImage = e.target.result;
+                        this.previewProfileImage = e.target.result;
 
                         // emit event to show image preview.
                         this.$emit("imagePreview", e.target.result);
@@ -140,8 +174,6 @@ export default defineComponent({
                 // Start the reader job - read file as a data url (base64 format)
                 reader.readAsDataURL(target.files[0]);
             }
-
-            // console.log("handle file here")
 
         }
     }
