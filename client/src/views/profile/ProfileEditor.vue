@@ -28,7 +28,7 @@ import CustomizeLinks from "./CustomizeLinks.vue";
 import ProfileDetails from "./ProfileDetails.vue";
 
 export default defineComponent({
-    name: "ProfileView",
+    name: "ProfileEditor",
     data() {
         return {
             tabs: [

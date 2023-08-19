@@ -6,7 +6,7 @@ import withUUID from "vue-uuid";
 import SignUpForm from "@/views/SignUpForm.vue";
 import LoginForm from "@/views/LoginForm.vue";
 import ForgotPasswordForm from "@/views/ForgotPasswordForm.vue";
-import ProfileView from "@/views/profile/ProfileView.vue";
+import ProfileEditor from "@/views/profile/ProfileEditor.vue";
 import ProfilePreview from "@/views/profilePreview/ProfilePreview.vue";
 
 const routes = [
@@ -15,8 +15,8 @@ const routes = [
   { path: "/login", component: LoginForm },
   { path: "/forgot-password", component: ForgotPasswordForm },
   {
-    path: "/profile-settings",
-    component: ProfileView,
+    path: "/profile-editor",
+    component: ProfileEditor,
     name: "profile-editor",
   },
   { path: "/profile", component: ProfilePreview, name: "profile" },
