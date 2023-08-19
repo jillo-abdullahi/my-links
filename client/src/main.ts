@@ -6,7 +6,7 @@ import withUUID from "vue-uuid";
 import SignUpForm from "@/views/SignUpForm.vue";
 import LoginForm from "@/views/LoginForm.vue";
 import ForgotPasswordForm from "@/views/ForgotPasswordForm.vue";
-import ProfileEditor from "@/views/profile/ProfileEditor.vue";
+import ProfileEditor from "@/views/profileEditor/ProfileEditor.vue";
 import ProfilePreview from "@/views/profilePreview/ProfilePreview.vue";
 
 const routes = [
