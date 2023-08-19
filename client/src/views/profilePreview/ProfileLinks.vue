@@ -1,5 +1,6 @@
 <template>
-    <div class="shadow-none sm:shadow-md rounded-xl py-12 px-14 flex flex-col gap-y-14 bg-white">
+    <div
+        class="shadow-md shadow-purple-700 rounded-xl py-12 px-14 flex flex-col gap-y-14 bg-white">
         <div class="flex flex-col">
             <div class="flex flex-col justify-center items-center gap-y-6">
                 <div class="bg-gray-300 w-24 h-24 rounded-full border-4 border-purple-700" :style="{

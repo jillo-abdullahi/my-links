@@ -1,6 +1,6 @@
 <template>
     <div class="relative min-h-screen w-full -mt-12 ">
-        <div class="absolute top-0 inset-x-0 bg-purple-700 rounded-b-2xl h-1/4"></div>
+        <div class="absolute top-0 inset-x-0 bg-purple-700 rounded-none sm:rounded-b-2xl h-1/4"></div>
         <div class="relative p-6 z-10">
             <ProfileNavBar />
         </div>
