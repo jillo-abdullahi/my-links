@@ -125,9 +125,8 @@ export default defineComponent({
         },
         async saveImageToCloudinary(imageFile: File) {
             try {
-                //TODO: store these in .env
-                const UPLOAD_PRESET = 'DevLinks'
-                const CLOUD_NAME = 'dsuhsqcb2'
+                const UPLOAD_PRESET = process.env.VUE_APP_UPLOAD_PRESET
+                const CLOUD_NAME = process.env.VUE_APP_CLOUD_NAME
 
                 const formData = new FormData();
                 formData.append('file', imageFile);
