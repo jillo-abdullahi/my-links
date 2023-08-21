@@ -31,7 +31,7 @@
                     <div class="col-span-12 md:col-span-8">
                         <InputField type="text" name="firstName" id="first-name" placeholder="e.g. John" label="First name"
                             :value="profileData.firstName" :error="error.firstName" :use-row-label="true"
-                            :hide-input-icon="true" @input="setFormValue" />
+                            :hide-input-icon="true" :default-value="profileData.firstName" @input="setFormValue" />
                     </div>
                 </div>
                 <div class="grid w-full grid-cols-12">
@@ -39,7 +39,8 @@
                     <div class="col-span-12 md:col-span-8">
                         <InputField type="text" name="lastName" id="last-name" placeholder="e.g. Appleseed"
                             label="Email address" :value="profileData.lastName" :error="error.lastName"
-                            :use-row-label="true" :hide-input-icon="true" @input="setFormValue" />
+                            :use-row-label="true" :hide-input-icon="true" :default-value="profileData.lastName"
+                            @input="setFormValue" />
                     </div>
                 </div>
                 <div class="grid w-full grid-cols-12">
@@ -47,14 +48,14 @@
                     <div class="col-span-12 md:col-span-8">
                         <InputField type="email" name="email" id="email" placeholder="e.g. email@example.com"
                             label="Last name" :value="profileData.email" :error="error.email" :use-row-label="true"
-                            :hide-input-icon="true" @input="setFormValue" />
+                            :hide-input-icon="true" @input="setFormValue" :default-value="profileData.email" />
                     </div>
                 </div>
             </div>
         </div>
-        <div class="mt-10 w-full flex items-center justify-end p-6 border-t border-gray-200" v-if="profileChanged">
+        <div class="mt-10 w-full flex items-center justify-end p-6 border-t border-gray-200">
             <div class="w-fit-content">
-                <ButtonPrimary text="Save" :is-inside-nav="false" />
+                <ButtonPrimary text="Save" :is-inside-nav="false" :disabled="!profileChangesMade" />
             </div>
         </div>
     </form>
@@ -73,12 +74,13 @@ export default defineComponent({
         InputField,
         UploadImageIcon
     },
+
     data() {
         return {
             profileData: {
-                firstName: "",
-                lastName: "",
-                email: "",
+                firstName: "A first name",
+                lastName: "Somebodu",
+                email: "boobear@gmeil.com",
             } as {
                 firstName: string,
                 lastName: string,
@@ -86,6 +88,7 @@ export default defineComponent({
             },
             profileImage: null as File | null,
             previewProfileImage: '' as string | ArrayBuffer | null,
+            profileChangesMade: false,
 
             error: {
                 email: "",
@@ -98,9 +101,16 @@ export default defineComponent({
         console.log("Mounted - get user current details if they exist")
     },
     computed: {
-        profileChanged(): boolean {
-            return true;
-        }
+    },
+    watch: {
+        profileData: {
+            handler() {
+                console.log("SOMETHING CHANGED HERE")
+                this.profileChangesMade = true
+            },
+            deep: true, // Watch nested changes
+        },
+
     },
 
     methods: {
@@ -121,7 +131,7 @@ export default defineComponent({
 
                 const formData = new FormData();
                 formData.append('file', imageFile);
-                formData.append('upload_preset', UPLOAD_PRESET); 
+                formData.append('upload_preset', UPLOAD_PRESET);
 
                 const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
                     method: 'POST',
