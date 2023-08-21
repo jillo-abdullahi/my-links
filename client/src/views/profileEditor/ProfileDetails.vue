@@ -105,13 +105,19 @@ export default defineComponent({
     watch: {
         profileData: {
             handler() {
-                console.log("SOMETHING CHANGED HERE")
+                //TODO: refactor this to compare old value vs new value instead
                 this.profileChangesMade = true
             },
             deep: true, // Watch nested changes
         },
 
+        profileImage() {
+            this.profileChangesMade = true
+        },
+
     },
+
+
 
     methods: {
         submitProfile() {
