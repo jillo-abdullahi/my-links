@@ -7,21 +7,28 @@
                 <h2 class="text-gray-400 text-base">Add your details to create a personal touch to your profile.
                 </h2>
             </div>
-
             <div class="rounded-lg bg-gray-100 space-y-5 mt-10 p-5">
                 <div class="grid w-full grid-cols-12">
                     <div class="text-gray-400 hidden md:flex items-center justify-start col-span-4">Profile picture</div>
-                    <div class="col-span-12 md:col-span-8">
-                        <div>
+                    <div class="col-span-12 md:col-span-8 grid grid-cols-12 gap-x-6">
+                        <div class="col-span-6 w-48 h-48 rounded-lg bg-purple-100 flex items-center justify-center" :style="{
+                            backgroundImage: `url(${previewProfileImage})`,
+                            backgroundOrigin: 'center center',
+                            backgroundSize: 'cover',
+                            backgroundRepeat: 'no-repeat'
+                        }">
                             <input type="file" id="files" accept="image/*" class="hidden" @change="handleFileUpload">
                             <label for="files"
-                                class="rounded-lg bg-purple-100 p-10 flex flex-col justify-center items-center space-y-2 cursor-pointer">
-                                <UploadImageIcon />
-                                <p class="text-purple-700 font-bold">+ Upload Image</p>
+                                class="p-5 flex flex-col justify-center items-center space-y-2 cursor-pointer">
+                                <UploadImageIcon :fill="previewProfileImage ? '#ffffff' : '#633CFF'" />
+                                <p class="text-white font-bold" v-if="previewProfileImage">Change Image</p>
+                                <p class="text-purple-700 font-bold" v-else>+ Upload Image</p>
+
                             </label>
-                            <span class=" text-gray-400 text-sm">Image must be below 1024x1024px. Use PNG or JPG
-                                format.</span>
                         </div>
+                        <div class=" text-gray-400 col-span-6 flex items-center justify-start text-left text-sm">Image must
+                            be below 1024x1024px. Use PNG or JPG
+                            format.</div>
                     </div>
                 </div>
             </div>
@@ -121,11 +128,12 @@ export default defineComponent({
 
     methods: {
         submitProfile() {
-            console.log('submit profile', this.profileData);
+
             if (!this.profileImage) return;
 
             // save image to cloudinary
-            this.saveImageToCloudinary(this.profileImage);
+
+            // this.saveImageToCloudinary(this.profileImage);
 
 
         },
