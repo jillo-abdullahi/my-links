@@ -2,7 +2,7 @@
     <Menu as="div" class="relative inline-block text-left w-full">
         <div>
             <MenuButton
-                class="dropdown inline-flex w-full justify-between rounded-md bg-white px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 "
+                class="dropdown inline-flex w-full justify-between rounded-md bg-white px-3 py-3 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 border border-transparent"
                 @click="toggleDropdown">
                 <div class="flex items-center justify-center gap-x-2">
                     <component :is="linkIcon" class="h-4 w-4 text-gray-400 group-hover:fill-purple-700" aria-hidden="true"
@@ -29,7 +29,7 @@
             leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95"
             v-show="showDropdown">
             <MenuItems
-                class="w-full absolute right-0 z-10 mt-2 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                class="w-full absolute right-0 z-10 mt-2 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg focus:outline-none">
                 <div class="py-1 w-full" v-for="(item, index) in dropDownItems" :key="index">
                     <MenuItem>
                     <button class="group flex items-center px-4 py-2 text-sm w-full" @click="setSelectedOption(index)">
@@ -219,12 +219,12 @@ export default defineComponent({
 <style scoped>
 button.dropdown {
     border-radius: 0.5rem;
-    border: 1px solid var(--purple, #633CFF);
     background: var(--white, #FFF);
 }
 
 button.dropdown:active,
 button.dropdown:hover {
+    border: 1px solid var(--purple, #633CFF);
     box-shadow: 0px 0px 32px 0px rgba(99, 60, 255, 0.25);
 }
 </style>
