@@ -3,10 +3,10 @@
         <div class="p-6">
             <NavBar @change-tabs="setActiveTab" :tabs="tabs" />
             <div class="pt-6 grid grid-cols-12 gap-x-6">
-                <div class="col-span-5">
+                <div class="col-span-5 hidden md:block">
                     <MobilePreview :profile-image-preview="profileImagePreview" />
                 </div>
-                <div class="col-span-7">
+                <div class="col-span-12 md:col-span-7">
                     <div v-if="profileTabActive">
                         <ProfileDetails @image-preview="getProfileImagePreview" />
                     </div>
