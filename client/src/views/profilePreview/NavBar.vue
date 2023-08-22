@@ -1,6 +1,7 @@
 <template>
     <div class="flex w-full items-center justify-between px-5 py-4 rounded-lg bg-white">
-        <ButtonSecondary text="Back to Editor" :is-inside-nav="true" @button-clicked="backToEditor" />
+        <ButtonSecondary text="Back to Editor" :is-inside-nav="true" @button-clicked="backToEditor"
+            :is-mobile-responsive="false" />
         <ButtonPrimary text="Share Link" :full-width="false" />
     </div>
 </template>
