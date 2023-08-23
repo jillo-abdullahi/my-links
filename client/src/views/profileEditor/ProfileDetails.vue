@@ -64,6 +64,7 @@
             <div class="w-fit-content">
                 <ButtonPrimary text="Save" :is-inside-nav="false" :disabled="!profileChangesMade" />
             </div>
+            <button @click="notify">Notify me</button>
         </div>
     </form>
 </template>
@@ -73,13 +74,16 @@ import { defineComponent } from 'vue';
 import ButtonPrimary from "@/components/ButtonPrimary.vue";
 import InputField from "@/components/InputField.vue";
 import UploadImageIcon from "@/assets/icons/UploadImage.vue"
+import ToastNotification from "@/components/ToastNotification.vue"
+import { useToast, PluginOptions } from 'vue-toastification'
+
 
 export default defineComponent({
     name: 'ProfileDetails',
     components: {
         ButtonPrimary,
         InputField,
-        UploadImageIcon
+        UploadImageIcon,
     },
 
     data() {
@@ -127,6 +131,21 @@ export default defineComponent({
 
 
     methods: {
+        notify() {
+            const toast = useToast();
+            toast.info(ToastNotification, {
+                timeout: 2952,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+                draggable: true,
+                draggablePercent: 0.6,
+                showCloseButtonOnHover: false,
+                hideProgressBar: false,
+                closeButton: false,
+                rtl: false
+            });
+        },
         submitProfile() {
 
             if (!this.profileImage) return;
