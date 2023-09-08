@@ -152,7 +152,7 @@ export default defineComponent({
 
             // save image to cloudinary
 
-            // this.saveImageToCloudinary(this.profileImage);
+            this.saveImageToCloudinary(this.profileImage);
 
 
         },
@@ -164,6 +164,7 @@ export default defineComponent({
                 const formData = new FormData();
                 formData.append('file', imageFile);
                 formData.append('upload_preset', UPLOAD_PRESET);
+                formData.append('folder', process.env.VUE_APP_CLOUDINARY_IMAGE_FOLDER);
 
                 const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
                     method: 'POST',
