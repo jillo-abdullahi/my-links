@@ -1,20 +1,30 @@
 <template>
     <button class="text-white font-bold py-2 px-4 rounded-lg" :disabled="disabled" :class="{
-        'cursor-not-allowed hover:bg-purple-100 bg-purple-100': disabled,
+        'cursor-not-allowed bg-purple-300': disabled,
         'cursor-pointer bg-purple-700 hover:bg-purple-300': !disabled,
         'w-full': fullWidth
     }" @click="$emit('buttonClicked')">
-        {{ text }}
+        <div v-if="!isInProgressState">{{ text }}</div>
+        <div class="w-full flex items-center justify-center py-2" v-else-if="isInProgressState">
+            <ProgressSpinner />
+        </div>
     </button>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import ProgressSpinner from "./ProgressSpinner.vue"
 
 export default defineComponent({
     name: "ButtonPrimary",
+    components: {
+        ProgressSpinner
+    },
     props: {
-        text: String,
+        text: {
+            type: String,
+            required: true
+        },
         disabled: {
             type: Boolean,
             default: false
@@ -22,6 +32,10 @@ export default defineComponent({
         fullWidth: {
             type: Boolean,
             default: true
+        },
+        isInProgressState: {
+            type: Boolean,
+            default: false
         }
     },
 });

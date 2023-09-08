@@ -75,7 +75,7 @@ import ButtonPrimary from "@/components/ButtonPrimary.vue";
 import InputField from "@/components/InputField.vue";
 import UploadImageIcon from "@/assets/icons/UploadImage.vue"
 import ToastNotification from "@/components/ToastNotification.vue"
-import { useToast, PluginOptions } from 'vue-toastification'
+import { useToast } from 'vue-toastification'
 
 
 export default defineComponent({

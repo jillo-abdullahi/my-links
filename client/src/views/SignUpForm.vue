@@ -24,7 +24,8 @@
                         placeholder="At least 8 characters" label="Confirm password" @input="setValue"
                         :error="error.confirmPassword" />
 
-                    <ButtonPrimary text="Create new account" :disabled="disableSubmitButton" />
+                    <ButtonPrimary text="Create new account" :disabled="disableSubmitButton || isInProgressState"
+                        :is-in-progress-state="isInProgressState" />
                 </form>
 
                 <div class="flex items-center justify-center font-light text-sm space-x-1">
@@ -65,8 +66,10 @@ export default defineComponent({
                 username: '',
                 email: '',
                 password: '',
-                confirmPassword: ''
-            }
+                confirmPassword: '',
+                serverError: ''
+            },
+            isInProgressState: false
         }
     },
     watch: {
@@ -89,7 +92,7 @@ export default defineComponent({
         },
     },
     methods: {
-        submitForm() {
+        async submitForm() {
             const emptyErrorText = 'Cannot be empty';
 
             if (!this.username) {
@@ -125,7 +128,7 @@ export default defineComponent({
             } else if (this.confirmPassword.length < 8) {
                 this.error.confirmPassword = 'Password must be at least 8 characters';
             } else if (this.confirmPassword !== this.password) {
-                this.error.confirmPassword = 'passwords do not match';
+                this.error.confirmPassword = 'Passwords do not match';
             } else {
                 this.error.confirmPassword = '';
             }
@@ -135,6 +138,50 @@ export default defineComponent({
             }
             console.log('Form submitted', this.email, this.password);
             console.log('submit form', this.username, this.email, this.password, this.confirmPassword);
+            // this.isInProgressState = true;
+
+            // send to api
+            const apiUrl = process.env.VUE_APP_API_LINK
+
+            const res = await fetch(`${apiUrl}/auth/signup`, {
+                method: "POST",
+                mode: 'cors',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username: this.username,
+                    email: this.email,
+                    password: this.password
+                }),
+            });
+
+
+
+            const response = await res.json();
+
+            if (response.statusCode === 500) {
+
+                // TODO: Show this on the UI
+                this.error.serverError = "Internal server error"
+            } else if (response.statusCode === 403) {
+                const { message } = response;
+                if (message.includes("Email")) {
+                    this.error.email = message
+                } else if (message.includes("Username")) {
+                    this.error.username = message
+                }
+            } else {
+                // access token in local storage
+                const { access_token } = response;
+
+                console.log({ access_token })
+                localStorage.setItem("DevLinksAccessToken", access_token);
+
+                // navigate to dashboard    
+                this.$router.push({ name: 'profile-editor' });
+            }
+
         },
         setValue(event: InputEvent) {
             const name = (event.target as HTMLInputElement).name;
