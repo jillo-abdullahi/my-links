@@ -13,7 +13,7 @@ export class JwtAuthService {
     const secret = this.configService.get('JWT_SECRET');
     const payload = { sub: userId, email };
     const token = await this.jwtService.signAsync(payload, {
-      expiresIn: '1h',
+      expiresIn: '24h',
       secret,
     });
     return token;
