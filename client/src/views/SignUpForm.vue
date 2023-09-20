@@ -172,11 +172,9 @@ export default defineComponent({
                     this.error.username = message
                 }
             } else {
-                // access token in local storage
-                const { access_token } = response;
-
-                console.log({ access_token })
-                localStorage.setItem("DevLinksAccessToken", access_token);
+                // store response in local storage
+                const userDetails = JSON.stringify(response)
+                localStorage.setItem("DevLinksUserDetails", userDetails);
 
                 // navigate to dashboard    
                 this.$router.push({ name: 'profile-editor' });
