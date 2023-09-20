@@ -51,11 +51,11 @@
                     </div>
                 </div>
                 <div class="grid w-full grid-cols-12">
-                    <div class="text-gray-400 hidden md:flex items-center justify-start col-span-4">Email</div>
+                    <div class="text-gray-400 hidden md:flex items-center justify-start col-span-4">Bio</div>
                     <div class="col-span-12 md:col-span-8">
-                        <InputField type="email" name="email" id="email" placeholder="e.g. email@example.com"
-                            label="Last name" :value="profileData.email" :error="error.email" :use-row-label="true"
-                            :hide-input-icon="true" @input="setFormValue" :default-value="profileData.email" />
+                        <InputField type="text" name="bio" id="bio" placeholder="" label="Bio" :value="profileData.bio"
+                            :error="error.email" :use-row-label="true" :hide-input-icon="true" @input="setFormValue"
+                            :default-value="profileData.bio" />
                     </div>
                 </div>
             </div>
@@ -89,17 +89,44 @@ export default defineComponent({
     data() {
         return {
             profileData: {
-                firstName: "A first name",
-                lastName: "Somebodu",
-                email: "boobear@gmeil.com",
+                firstName: "",
+                lastName: "",
+                bio: "",
             } as {
                 firstName: string,
                 lastName: string,
-                email: string,
+                bio: string,
             },
             profileImage: null as File | null,
             previewProfileImage: '' as string | ArrayBuffer | null,
             profileChangesMade: false,
+
+            // details about user
+            accessToken: null,
+            userId: '',
+            username: '',
+            userProfileDetails: null as {
+                userId: string,
+                firstName: string,
+                lastName: string,
+                bio: string,
+                profession: string,
+                profileImage: string,
+                backgroundImage: string,
+                githubLink: string,
+                personalWebsiteLink: string,
+                youtubeLink: string,
+                linkedinLink: string,
+                xLink: string,
+                facebookLink: string,
+                instagramLink: string,
+                devToLink: string,
+                codeWarsLink: string,
+                freeCodeCampLink: string,
+                mediumLink: string,
+                stackoverflowLink: string,
+                threadsLink: string
+            } | null,
 
             error: {
                 email: "",
@@ -109,7 +136,21 @@ export default defineComponent({
         }
     },
     mounted() {
-        console.log("Mounted - get user current details if they exist")
+
+        // get user dettails from local storage
+        const storedUserDetails = localStorage.getItem('DevLinksUserDetails')
+        if (storedUserDetails) {
+            const user = JSON.parse(storedUserDetails)
+            const { access_token, id, username } = user;
+            this.accessToken = access_token;
+            this.userId = id;
+            this.username = username;
+        } else {
+            // prompt user to sign in again
+            console.log("USER SHOULD SIGN IN AGAIN")
+        }
+
+
     },
     computed: {
     },
@@ -125,11 +166,77 @@ export default defineComponent({
         profileImage() {
             this.profileChangesMade = true
         },
+        username() {
+            // send to api
+            const apiUrl = process.env.VUE_APP_API_LINK
+
+            fetch(`${apiUrl}/profile/${this.username}`, {
+                method: "GET",
+                mode: 'cors',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }).then((res) => res.json()).then((response) => {
+
+                // TODO: display this on the mobile screen
+
+                console.log(response)
+                const {
+                    userId,
+                    firstName,
+                    lastName,
+                    bio,
+                    profession,
+                    profileImage,
+                    backgroundImage,
+                    githubLink,
+                    personalWebsiteLink,
+                    youtubeLink,
+                    linkedinLink,
+                    xLink,
+                    facebookLink,
+                    instagramLink,
+                    devToLink,
+                    codeWarsLink,
+                    freeCodeCampLink,
+                    mediumLink,
+                    stackoverflowLink,
+                    threadsLink,
+                } = response.profile;
+                this.userProfileDetails = {
+                    userId,
+                    firstName,
+                    lastName,
+                    bio,
+                    profession,
+                    profileImage,
+                    backgroundImage,
+                    githubLink,
+                    personalWebsiteLink,
+                    youtubeLink,
+                    linkedinLink,
+                    xLink,
+                    facebookLink,
+                    instagramLink,
+                    devToLink,
+                    codeWarsLink,
+                    freeCodeCampLink,
+                    mediumLink,
+                    stackoverflowLink,
+                    threadsLink
+                };
+                this.profileData.firstName = firstName;
+                this.profileData.lastName = lastName;
+                this.profileData.bio = bio;
+
+
+                if (profileImage) this.$emit("imagePreview", profileImage);
+            }).catch((err) => {
+                console.log(err)
+            })
+        }
 
     },
-
-
-
     methods: {
         notify() {
             const toast = useToast();
@@ -151,7 +258,6 @@ export default defineComponent({
             if (!this.profileImage) return;
 
             // save image to cloudinary
-
             this.saveImageToCloudinary(this.profileImage);
 
 
@@ -160,6 +266,7 @@ export default defineComponent({
             try {
                 const UPLOAD_PRESET = process.env.VUE_APP_UPLOAD_PRESET
                 const CLOUD_NAME = process.env.VUE_APP_CLOUD_NAME
+                const API_URL = process.env.VUE_APP_API_LINK
 
                 const formData = new FormData();
                 formData.append('file', imageFile);
@@ -178,6 +285,22 @@ export default defineComponent({
                 if (secure_url) {
                     // TODO: save to db
                     this.previewProfileImage = secure_url
+
+                    // send to api
+                    const res = await fetch(`${API_URL}/profile`, {
+                        method: "PATCH",
+                        mode: 'cors',
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${this.accessToken}`
+                        },
+                        body: JSON.stringify({
+                            ...this.userProfileDetails, profileImage: secure_url, firstName: this.profileData.firstName, lastName: this.profileData.lastName, bio: this.profileData.bio
+                        }),
+                    });
+
+                    const response = await res.json();
+                    console.log(response);
 
                     this.$emit("imagePreview", secure_url);
                 }
@@ -222,4 +345,3 @@ export default defineComponent({
     }
 })
 </script>
-<style scoped></style>
