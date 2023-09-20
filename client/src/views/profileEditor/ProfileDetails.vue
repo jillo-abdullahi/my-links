@@ -53,8 +53,8 @@
                 <div class="grid w-full grid-cols-12">
                     <div class="text-gray-400 hidden md:flex items-center justify-start col-span-4">Bio</div>
                     <div class="col-span-12 md:col-span-8">
-                        <InputField type="text" name="bio" id="bio" placeholder="" label="Bio" :value="profileData.bio"
-                            :error="error.email" :use-row-label="true" :hide-input-icon="true" @input="setFormValue"
+                        <TextArea name="bio" id="bio" placeholder="" label="Bio" :value="profileData.bio"
+                            :error="error.bio" :use-row-label="true" @input="setFormValue"
                             :default-value="profileData.bio" />
                     </div>
                 </div>
@@ -73,6 +73,7 @@
 import { defineComponent } from 'vue';
 import ButtonPrimary from "@/components/ButtonPrimary.vue";
 import InputField from "@/components/InputField.vue";
+import TextArea from "@/components/TextArea.vue";
 import UploadImageIcon from "@/assets/icons/UploadImage.vue"
 import ToastNotification from "@/components/ToastNotification.vue"
 import { useToast } from 'vue-toastification'
@@ -84,6 +85,7 @@ export default defineComponent({
         ButtonPrimary,
         InputField,
         UploadImageIcon,
+        TextArea
     },
 
     data() {
@@ -129,7 +131,7 @@ export default defineComponent({
             } | null,
 
             error: {
-                email: "",
+                bio: "",
                 firstName: "",
                 lastName: ""
             }
