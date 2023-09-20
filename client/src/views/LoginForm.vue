@@ -52,7 +52,8 @@ export default defineComponent({
             password: '',
             error: {
                 email: '',
-                password: ''
+                password: '',
+                loginError: '',
             }
         }
     },
@@ -94,6 +95,37 @@ export default defineComponent({
             console.log('Form submitted', this.email, this.password);
 
             // api call to login
+
+            // send to api
+            const apiUrl = process.env.VUE_APP_API_LINK
+
+            fetch(`${apiUrl}/auth/signin`, {
+                method: "POST",
+                mode: 'cors',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email: this.email,
+                    password: this.password
+                }),
+            }).then((res) => res.json()).then((response) => {
+                if (response.statusCode === 500) {
+
+                    // TODO: Show this on the UI
+                    this.error.loginError = "Internal server error"
+                } else if (response.statusCode === 403) {
+                    this.error.email = "Incorrect credentials";
+                    this.error.password = "Incorrect credentials";
+                } else {
+                    // store response in local storage
+                    const userDetails = JSON.stringify(response)
+                    localStorage.setItem("DevLinksUserDetails", userDetails);
+
+                    // navigate to dashboard    
+                    this.$router.push({ name: 'profile-editor' });
+                }
+            })
         },
         setValue(event: InputEvent) {
             const name = (event.target as HTMLInputElement).name;
