@@ -63,6 +63,12 @@ export default defineComponent({
             value: this.defaultValue,
         }
     },
+
+    watch: {
+        defaultValue(val: string) {
+            this.value = val
+        }
+    }
 });
 </script>
 <style scoped>

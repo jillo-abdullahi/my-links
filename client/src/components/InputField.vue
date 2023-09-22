@@ -111,6 +111,14 @@ export default defineComponent({
             inputType: this.type, // this is to toggle the password visibility
         }
     },
+    watch: {
+        defaultValue: {
+            handler(val: string) {
+                this.value = val;
+            },
+            immediate: true
+        }
+    },
     methods: {
         togglePasswordVisibility(): void {
             if (this.inputType === 'password') {
