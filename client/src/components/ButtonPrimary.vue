@@ -1,7 +1,7 @@
 <template>
     <button class="text-white font-bold py-2 px-4 rounded-lg" :disabled="disabled" :class="{
         'cursor-not-allowed bg-purple-300': disabled,
-        'cursor-pointer bg-purple-700 hover:bg-purple-300': !disabled,
+        'cursor-pointer bg-purple-700 hover:bg-opacity-90': !disabled,
         'w-full': fullWidth
     }" @click="$emit('buttonClicked')">
         <div v-if="!isInProgressState">{{ text }}</div>

@@ -15,7 +15,7 @@
                         :value="email" @input="setValue" :error="error.email" />
                     <InputField type="password" name="password" id="password" placeholder="Enter your password"
                         label="Password" :value="password" @input="setValue" :error="error.password" />
-                    <ButtonPrimary text="Login" :disabled="disableSubmitButton" />
+                    <ButtonPrimary text="Login" />
                 </form>
 
                 <div class="flex items-center justify-center font-light text-sm space-x-1">
@@ -65,12 +65,6 @@ export default defineComponent({
             this.error.password = ''; // reset password error once user starts typing
         }
     },
-    computed: {
-        disableSubmitButton(): boolean {
-            return Boolean(this.error.email) || Boolean(this.error.password);
-        }
-    },
-
     methods: {
         submitForm() {
             const emptyErrorText = 'Cannot be empty';
