@@ -6,6 +6,8 @@ import {
   Post,
   Get,
   Query,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {
@@ -16,8 +18,9 @@ import {
   ForgotPwdDTO,
   ResetPwdDTO,
 } from './dto';
-import { ApiBody, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiResponse } from '@nestjs/swagger';
 import { AuthConfirmationsService } from './confirmationServices';
+import { JwtGuard } from '../auth/guard';
 
 @Controller('auth')
 export class AuthController {
@@ -77,6 +80,22 @@ export class AuthController {
   @Post('/check-username')
   async checkUsername(@Body() body: CheckUsernameDTO) {
     return this.authService.checkUsername(body);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: 200,
+    description: 'User details successfully retrieved. Token is valid.',
+  })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  @ApiResponse({ status: 403, description: 'Invalid access token' })
+  @ApiResponse({ status: 500, description: 'Internal server error.' })
+  @UseGuards(JwtGuard)
+  @ApiBearerAuth('access-token')
+  @Get('verify-user')
+  updateProfile(@Req() req: any) {
+    const { user } = req;
+    return this.authService.verifyUser(user.sub);
   }
 
   // Confirm email

@@ -1,4 +1,9 @@
-import { Body, ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  Body,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
   AuthDTO,
@@ -235,7 +240,7 @@ export class AuthService {
   }
 
   /**
-   * check username
+   * check to see if username already exists
    * @param username
    * @returns boolean
    * */
@@ -254,6 +259,29 @@ export class AuthService {
       } else {
         return false;
       }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * verify access token only
+   * @param userId - user id from the access token
+   * @returns user
+   */
+  async verifyUser(userId: string) {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+      delete user.password;
+      return user;
     } catch (error) {
       throw error;
     }
