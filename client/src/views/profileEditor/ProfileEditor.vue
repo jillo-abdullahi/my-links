@@ -4,11 +4,14 @@
             <NavBar @change-tabs="setActiveTab" :tabs="tabs" />
             <div class="pt-6 grid grid-cols-12 gap-x-6">
                 <div class="col-span-5 hidden md:block">
-                    <MobilePreview :profile-image-preview="profileImagePreview" />
+                    <MobilePreview
+                        :profile-image-preview="profileImagePreview ? profileImagePreview : profileData.userProfileImage" />
                 </div>
                 <div class="col-span-12 md:col-span-7">
                     <div v-if="profileTabActive">
-                        <ProfileDetails @image-preview="getProfileImagePreview" />
+                        <ProfileDetails @image-preview="getProfileImagePreview" :access-token="accessToken"
+                            :profile-data="profileData" :user-id="userId" :username="username"
+                            :set-form-value="setFormValue" :user-profile-details="userProfileDetails" />
                     </div>
                     <div v-else-if="linksTabActive">
                         <CustomizeLinks />
@@ -26,6 +29,7 @@ import NavBar from "./NavBar.vue";
 import MobilePreview from "./MobilePreview.vue";
 import CustomizeLinks from "./CustomizeLinks.vue";
 import ProfileDetails from "./ProfileDetails.vue";
+import { UserProfileDetails, UserProfile } from "@/types";
 
 export default defineComponent({
     name: "ProfileEditor",
@@ -35,7 +39,18 @@ export default defineComponent({
                 { name: 'Links', current: false },
                 { name: 'Profile', current: true },
             ] as { name: string, current: boolean }[],
-            profileImagePreview: ''
+            profileImagePreview: '',
+            profileData: {
+                firstName: "",
+                lastName: "",
+                bio: "",
+                userProfileImage: "",
+            } as UserProfile,
+            // details about user
+            accessToken: '',
+            userId: '',
+            username: '',
+            userProfileDetails: null as UserProfileDetails | null,
         }
     },
     components: {
@@ -65,7 +80,134 @@ export default defineComponent({
 
         getProfileImagePreview(base64Image: string): void {
             this.profileImagePreview = base64Image
-        }
+        },
+
+        setFormValue(event: InputEvent) {
+            const name = (event.target as HTMLInputElement).name as 'firstName' || 'lastName' || 'email';
+            const value = (event.target as HTMLInputElement).value;
+
+            this.profileData[name] = value;
+
+        },
     },
+    mounted() {
+        // get user dettails from local storage
+        const storedUserDetails = localStorage.getItem('DevLinksUserDetails')
+        if (storedUserDetails) {
+            const user = JSON.parse(storedUserDetails)
+            const { access_token } = user;
+            if (access_token) {
+                //verify user details
+                const apiUrl = process.env.VUE_APP_API_LINK
+
+                fetch(`${apiUrl}/auth/verify-user`, {
+                    method: "GET",
+                    mode: 'cors',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${access_token}`
+                    },
+
+                }).then((res) => res.json()).then((response) => {
+                    if (response.statusCode === 500) {
+
+                        // TODO: Show this on the UI
+                        console.log(response)
+                    } else if (response.statusCode === 403) {
+                        // token is invalid. Send to login form
+                        // TODO: Show this on the UI to indicate that the token is invalid
+                        this.$router.push({ name: 'SignIn' })
+                    } else {
+                        const { username, id } = response
+                        this.userId = id;
+                        this.username = username;
+                        this.accessToken = access_token;
+                    }
+                })
+            } else {
+                this.$router.push({ name: 'SignIn' })
+            }
+
+        } else {
+            // prompt user to sign in again
+            this.$router.push({ name: 'SignIn' })
+        }
+
+    },
+
+    watch: {
+        username() {
+            // send to api
+            const apiUrl = process.env.VUE_APP_API_LINK
+
+            fetch(`${apiUrl}/profile/${this.username}`, {
+                method: "GET",
+                mode: 'cors',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }).then((res) => res.json()).then((response) => {
+
+                // TODO: display this on the mobile screen
+
+                console.log(response)
+                const {
+                    userId,
+                    firstName,
+                    lastName,
+                    bio,
+                    profession,
+                    profileImage,
+                    backgroundImage,
+                    githubLink,
+                    personalWebsiteLink,
+                    youtubeLink,
+                    linkedinLink,
+                    xLink,
+                    facebookLink,
+                    instagramLink,
+                    devToLink,
+                    codeWarsLink,
+                    freeCodeCampLink,
+                    mediumLink,
+                    stackoverflowLink,
+                    threadsLink,
+                } = response.profile;
+                this.userProfileDetails = {
+                    userId,
+                    firstName,
+                    lastName,
+                    bio,
+                    profession,
+                    profileImage,
+                    backgroundImage,
+                    githubLink,
+                    personalWebsiteLink,
+                    youtubeLink,
+                    linkedinLink,
+                    xLink,
+                    facebookLink,
+                    instagramLink,
+                    devToLink,
+                    codeWarsLink,
+                    freeCodeCampLink,
+                    mediumLink,
+                    stackoverflowLink,
+                    threadsLink
+                };
+                this.profileData.firstName = firstName;
+                this.profileData.lastName = lastName;
+                this.profileData.bio = bio;
+                this.profileData.userProfileImage = profileImage;
+
+                // show image on the mobile preview section
+                if (profileImage) this.$emit("imagePreview", profileImage);
+            }).catch((err) => {
+
+                //TODO: show this on the UI
+                console.log(err)
+            })
+        }
+    }
 });
 </script>

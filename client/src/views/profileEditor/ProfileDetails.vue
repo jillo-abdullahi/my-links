@@ -74,7 +74,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 import {
     PencilIcon
 } from '@heroicons/vue/20/solid'
@@ -84,7 +84,7 @@ import TextArea from "@/components/TextArea.vue";
 import UploadImageIcon from "@/assets/icons/UploadImage.vue"
 import ToastNotification from "@/components/ToastNotification.vue"
 import { useToast } from 'vue-toastification'
-
+import { UserProfileDetails, FormValueFunction, UserProfile } from "@/types";
 
 export default defineComponent({
     name: 'ProfileDetails',
@@ -95,107 +95,44 @@ export default defineComponent({
         TextArea,
         PencilIcon,
     },
+    props: {
+        profileData: {
+            type: Object as PropType<UserProfile>,
+            required: true
+        },
+        accessToken: {
+            type: String,
+            required: true
+        },
+        userId: {
+            type: String,
+            required: true
+        },
+        username: {
+            type: String,
+            required: true
+        },
+        userProfileDetails: {
+            type: Object as PropType<UserProfileDetails | null>,
+            required: true
+        },
+        setFormValue: {
+            type: Function as PropType<FormValueFunction>,
+            required: true,
 
+        }
+    },
     data() {
         return {
-            profileData: {
-                firstName: "",
-                lastName: "",
-                bio: "",
-                userProfileImage: "",
-            } as {
-                firstName: string,
-                lastName: string,
-                bio: string,
-                userProfileImage: string,
-            },
             profileImage: null as File | null,
             previewProfileImage: '' as string | ArrayBuffer | null,
             profileChangesMade: false,
-
-            // details about user
-            accessToken: null,
-            userId: '',
-            username: '',
-            userProfileDetails: null as {
-                userId: string,
-                firstName: string,
-                lastName: string,
-                bio: string,
-                profession: string,
-                profileImage: string,
-                backgroundImage: string,
-                githubLink: string,
-                personalWebsiteLink: string,
-                youtubeLink: string,
-                linkedinLink: string,
-                xLink: string,
-                facebookLink: string,
-                instagramLink: string,
-                devToLink: string,
-                codeWarsLink: string,
-                freeCodeCampLink: string,
-                mediumLink: string,
-                stackoverflowLink: string,
-                threadsLink: string
-            } | null,
-
             error: {
                 bio: "",
                 firstName: "",
                 lastName: ""
             }
         }
-    },
-    mounted() {
-
-        // get user dettails from local storage
-        const storedUserDetails = localStorage.getItem('DevLinksUserDetails')
-        if (storedUserDetails) {
-            const user = JSON.parse(storedUserDetails)
-            const { access_token } = user;
-
-
-            if (access_token) {
-                //verify user details
-                const apiUrl = process.env.VUE_APP_API_LINK
-
-                fetch(`${apiUrl}/auth/verify-user`, {
-                    method: "GET",
-                    mode: 'cors',
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${access_token}`
-                    },
-
-                }).then((res) => res.json()).then((response) => {
-                    if (response.statusCode === 500) {
-
-                        // TODO: Show this on the UI
-                        console.log(response)
-                    } else if (response.statusCode === 403) {
-                        // token is invalid. Send to login form
-                        // TODO: Show this on the UI to indicate that the token is invalid
-                        this.$router.push({ name: 'SignIn' })
-                    } else {
-                        const { username, id } = response
-                        this.userId = id;
-                        this.username = username;
-                        this.accessToken = access_token;
-                    }
-                })
-            } else {
-                this.$router.push({ name: 'SignIn' })
-            }
-
-        } else {
-            // prompt user to sign in again
-            this.$router.push({ name: 'SignIn' })
-        }
-
-
-    },
-    computed: {
     },
     watch: {
         profileData: {
@@ -209,78 +146,7 @@ export default defineComponent({
         profileImage() {
             this.profileChangesMade = true
         },
-        username() {
-            // send to api
-            const apiUrl = process.env.VUE_APP_API_LINK
 
-            fetch(`${apiUrl}/profile/${this.username}`, {
-                method: "GET",
-                mode: 'cors',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }).then((res) => res.json()).then((response) => {
-
-                // TODO: display this on the mobile screen
-
-                console.log(response)
-                const {
-                    userId,
-                    firstName,
-                    lastName,
-                    bio,
-                    profession,
-                    profileImage,
-                    backgroundImage,
-                    githubLink,
-                    personalWebsiteLink,
-                    youtubeLink,
-                    linkedinLink,
-                    xLink,
-                    facebookLink,
-                    instagramLink,
-                    devToLink,
-                    codeWarsLink,
-                    freeCodeCampLink,
-                    mediumLink,
-                    stackoverflowLink,
-                    threadsLink,
-                } = response.profile;
-                this.userProfileDetails = {
-                    userId,
-                    firstName,
-                    lastName,
-                    bio,
-                    profession,
-                    profileImage,
-                    backgroundImage,
-                    githubLink,
-                    personalWebsiteLink,
-                    youtubeLink,
-                    linkedinLink,
-                    xLink,
-                    facebookLink,
-                    instagramLink,
-                    devToLink,
-                    codeWarsLink,
-                    freeCodeCampLink,
-                    mediumLink,
-                    stackoverflowLink,
-                    threadsLink
-                };
-                this.profileData.firstName = firstName;
-                this.profileData.lastName = lastName;
-                this.profileData.bio = bio;
-                this.profileData.userProfileImage = profileImage;
-
-                // show image on the mobile preview section
-                if (profileImage) this.$emit("imagePreview", profileImage);
-            }).catch((err) => {
-
-                //TODO: show this on the UI
-                console.log(err)
-            })
-        }
 
     },
     methods: {
@@ -357,20 +223,12 @@ export default defineComponent({
                 //TODO: handle error here
             }
         },
-        setFormValue(event: InputEvent) {
-            const name = (event.target as HTMLInputElement).name as 'firstName' || 'lastName' || 'email';
-            const value = (event.target as HTMLInputElement).value;
-
-            this.profileData[name] = value;
-
-        },
         handleFileUpload(event: Event) {
             const target = event.target as HTMLInputElement;
             if (target && target.files) {
                 this.profileImage = target.files[0]
                 // upload file to cloudinary once user saves
                 // generate base64 string of image for preview purposes only
-
                 let reader = new FileReader();
                 // callback function to run, when FileReader finishes its job
                 reader.onload = (e: ProgressEvent<FileReader>) => {
