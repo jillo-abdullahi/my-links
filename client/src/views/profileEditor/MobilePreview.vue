@@ -24,8 +24,15 @@
                             backgroundRepeat: 'no-repeat'
                         }"></div>
                         <div class="flex flex-col items-center justify-center space-y-3">
-                            <div class="bg-gray-300 w-40 h-4 rounded-full"></div>
-                            <div class="bg-gray-300 w-28 h-2 rounded-full"></div>
+
+                            <!-- username  -->
+                            <div v-if="username" class="text-gray-800 font-bold">@{{ username }}</div>
+                            <div class="bg-gray-300 w-40 h-4 rounded-full" v-else></div>
+
+                            <!-- bio  -->
+                            <div v-if="bio" class="text-gray-900 text-sm max-w-[200px] line-clamp-3">{{ bio }}
+                            </div>
+                            <div class="bg-gray-300 w-28 h-2 rounded-full" v-else></div>
                         </div>
                     </div>
                     <div class="flex flex-col items-center justify-center space-y-4">
@@ -52,6 +59,16 @@ export default defineComponent({
     props: {
         profileImagePreview: {
             type: String,
+            default: ''
+        },
+        username: {
+            type: String,
+            required: true,
+            default: ''
+        },
+        bio: {
+            type: String,
+            required: true,
             default: ''
         }
     }
