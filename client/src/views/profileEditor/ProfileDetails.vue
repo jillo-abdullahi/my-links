@@ -12,7 +12,7 @@
                     <div class="text-gray-400 hidden md:flex items-center justify-start col-span-4">Profile picture</div>
                     <div class="col-span-12 md:col-span-8 grid grid-cols-12 gap-x-6">
                         <div class="col-span-6 w-48 h-48 rounded-lg bg-purple-100 flex items-center justify-center" :style="{
-                            backgroundImage: `url(${previewProfileImage})`,
+                            backgroundImage: `url(${previewProfileImage ? previewProfileImage : profileData.userProfileImage})`,
                             backgroundOrigin: 'center center',
                             backgroundSize: 'cover',
                             backgroundRepeat: 'no-repeat'
@@ -20,10 +20,15 @@
                             <input type="file" id="files" accept="image/*" class="hidden" @change="handleFileUpload">
                             <label for="files"
                                 class="p-5 flex flex-col justify-center items-center space-y-2 cursor-pointer">
-                                <UploadImageIcon :fill="previewProfileImage ? '#ffffff' : '#633CFF'" />
-                                <p class="text-white font-bold" v-if="previewProfileImage">Change Image</p>
-                                <p class="text-purple-700 font-bold" v-else>+ Upload Image</p>
-
+                                <div v-show="!profileData.userProfileImage && !previewProfileImage">
+                                    <UploadImageIcon :fill="profileData.userProfileImage ? '#ffffff' : '#633CFF'" />
+                                </div>
+                                <p class="text-white font-bold p-2 bg-gray-100 rounded-full"
+                                    v-show="profileData.userProfileImage || previewProfileImage">
+                                    <PencilIcon class="text-gray-400 w-4 h-4" />
+                                </p>
+                                <p class="text-purple-700 font-bold"
+                                    v-show="!profileData.userProfileImage && !previewProfileImage">+ Upload Image</p>
                             </label>
                         </div>
                         <div class=" text-gray-400 col-span-6 flex items-center justify-start text-left text-sm">Image must
@@ -70,6 +75,9 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import {
+    PencilIcon
+} from '@heroicons/vue/20/solid'
 import ButtonPrimary from "@/components/ButtonPrimary.vue";
 import InputField from "@/components/InputField.vue";
 import TextArea from "@/components/TextArea.vue";
@@ -84,7 +92,8 @@ export default defineComponent({
         ButtonPrimary,
         InputField,
         UploadImageIcon,
-        TextArea
+        TextArea,
+        PencilIcon,
     },
 
     data() {
@@ -93,10 +102,12 @@ export default defineComponent({
                 firstName: "",
                 lastName: "",
                 bio: "",
+                userProfileImage: "",
             } as {
                 firstName: string,
                 lastName: string,
                 bio: string,
+                userProfileImage: string,
             },
             profileImage: null as File | null,
             previewProfileImage: '' as string | ArrayBuffer | null,
@@ -144,6 +155,7 @@ export default defineComponent({
             const user = JSON.parse(storedUserDetails)
             const { access_token } = user;
 
+
             if (access_token) {
                 //verify user details
                 const apiUrl = process.env.VUE_APP_API_LINK
@@ -169,6 +181,7 @@ export default defineComponent({
                         const { username, id } = response
                         this.userId = id;
                         this.username = username;
+                        this.accessToken = access_token;
                     }
                 })
             } else {
@@ -258,6 +271,7 @@ export default defineComponent({
                 this.profileData.firstName = firstName;
                 this.profileData.lastName = lastName;
                 this.profileData.bio = bio;
+                this.profileData.userProfileImage = profileImage;
 
                 // show image on the mobile preview section
                 if (profileImage) this.$emit("imagePreview", profileImage);
@@ -286,56 +300,58 @@ export default defineComponent({
             });
         },
         submitProfile() {
-
-            if (!this.profileImage) return;
-
-            // save image to cloudinary
-            this.saveImageToCloudinary(this.profileImage);
+            // save user profile
+            this.updateUserProfile();
 
 
         },
-        async saveImageToCloudinary(imageFile: File) {
+        async updateUserProfile() {
             try {
                 const UPLOAD_PRESET = process.env.VUE_APP_UPLOAD_PRESET
                 const CLOUD_NAME = process.env.VUE_APP_CLOUD_NAME
                 const API_URL = process.env.VUE_APP_API_LINK
 
-                const formData = new FormData();
-                formData.append('file', imageFile);
-                formData.append('upload_preset', UPLOAD_PRESET);
-                formData.append('folder', process.env.VUE_APP_CLOUDINARY_IMAGE_FOLDER);
+                let profileImage = this.profileData.userProfileImage;
 
-                const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
-                    method: 'POST',
-                    body: formData,
-                });
+                // if there's a new image uploaded
+                if (this.profileImage) {
+                    const formData = new FormData();
+                    formData.append('file', this.profileImage);
+                    formData.append('upload_preset', UPLOAD_PRESET);
+                    formData.append('folder', process.env.VUE_APP_CLOUDINARY_IMAGE_FOLDER);
 
-                const data = await response.json();
-
-                const secure_url = data.secure_url ? data.secure_url : "";
-
-                if (secure_url) {
-                    // TODO: save to db
-                    this.previewProfileImage = secure_url
-
-                    // send to api
-                    const res = await fetch(`${API_URL}/profile`, {
-                        method: "PATCH",
-                        mode: 'cors',
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${this.accessToken}`
-                        },
-                        body: JSON.stringify({
-                            ...this.userProfileDetails, profileImage: secure_url, firstName: this.profileData.firstName, lastName: this.profileData.lastName, bio: this.profileData.bio
-                        }),
+                    const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+                        method: 'POST',
+                        body: formData,
                     });
 
-                    const response = await res.json();
-                    console.log(response);
+                    const data = await response.json();
+                    const secure_url = data.secure_url ? data.secure_url : "";
+                    profileImage = secure_url;
 
                     this.$emit("imagePreview", secure_url);
                 }
+
+                // send to api
+
+
+                const res = await fetch(`${API_URL}/profile`, {
+                    method: "PATCH",
+                    mode: 'cors',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${this.accessToken}`
+                    },
+                    body: JSON.stringify({
+                        ...this.userProfileDetails, profileImage, firstName: this.profileData.firstName, lastName: this.profileData.lastName, bio: this.profileData.bio
+                    }),
+                });
+
+                const response = await res.json();
+                console.log(response);
+
+
+
             } catch (error) {
                 console.error('Upload error:', error);
                 //TODO: handle error here
@@ -359,12 +375,11 @@ export default defineComponent({
                 // callback function to run, when FileReader finishes its job
                 reader.onload = (e: ProgressEvent<FileReader>) => {
                     // Note: arrow function used here, so that "this refers to the Vue component
-                    // Read image as base64 and set to previewProfileImage
+                    // Read image as base64 and set to preview profile image
                     if (e.target) {
-                        this.previewProfileImage = e.target.result;
-
                         // emit event to show image preview.
-                        this.$emit("imagePreview", e.target.result);
+                        this.previewProfileImage = e.target.result;
+                        this.$emit("imagePreview", this.previewProfileImage);
                     }
 
                 };
