@@ -53,9 +53,8 @@
                 <div class="grid w-full grid-cols-12">
                     <div class="text-gray-400 hidden md:flex items-center justify-start col-span-4">Bio</div>
                     <div class="col-span-12 md:col-span-8">
-                        <TextArea name="bio" id="bio" placeholder="" label="Bio" :value="profileData.bio"
-                            :error="error.bio" :use-row-label="true" @input="setFormValue"
-                            :default-value="profileData.bio" />
+                        <TextArea name="bio" id="bio" placeholder="" label="Bio" :value="profileData.bio" :error="error.bio"
+                            :use-row-label="true" @input="setFormValue" :default-value="profileData.bio" />
                     </div>
                 </div>
             </div>
@@ -143,13 +142,42 @@ export default defineComponent({
         const storedUserDetails = localStorage.getItem('DevLinksUserDetails')
         if (storedUserDetails) {
             const user = JSON.parse(storedUserDetails)
-            const { access_token, id, username } = user;
-            this.accessToken = access_token;
-            this.userId = id;
-            this.username = username;
+            const { access_token } = user;
+
+            if (access_token) {
+                //verify user details
+                const apiUrl = process.env.VUE_APP_API_LINK
+
+                fetch(`${apiUrl}/auth/verify-user`, {
+                    method: "GET",
+                    mode: 'cors',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${access_token}`
+                    },
+
+                }).then((res) => res.json()).then((response) => {
+                    if (response.statusCode === 500) {
+
+                        // TODO: Show this on the UI
+                        console.log(response)
+                    } else if (response.statusCode === 403) {
+                        // token is invalid. Send to login form
+                        // TODO: Show this on the UI to indicate that the token is invalid
+                        this.$router.push({ name: 'SignIn' })
+                    } else {
+                        const { username, id } = response
+                        this.userId = id;
+                        this.username = username;
+                    }
+                })
+            } else {
+                this.$router.push({ name: 'SignIn' })
+            }
+
         } else {
             // prompt user to sign in again
-            console.log("USER SHOULD SIGN IN AGAIN")
+            this.$router.push({ name: 'SignIn' })
         }
 
 
@@ -231,9 +259,11 @@ export default defineComponent({
                 this.profileData.lastName = lastName;
                 this.profileData.bio = bio;
 
-
+                // show image on the mobile preview section
                 if (profileImage) this.$emit("imagePreview", profileImage);
             }).catch((err) => {
+
+                //TODO: show this on the UI
                 console.log(err)
             })
         }
