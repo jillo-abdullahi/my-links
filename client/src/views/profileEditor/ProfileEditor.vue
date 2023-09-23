@@ -15,7 +15,8 @@
                             :set-form-value="setFormValue" :user-profile-details="userProfileDetails" />
                     </div>
                     <div v-else-if="linksTabActive">
-                        <CustomizeLinks />
+                        <CustomizeLinks :access-token="accessToken" :user-id="userId"
+                            :user-profile-details="userProfileDetails" />
                     </div>
                 </div>
             </div>
@@ -163,16 +164,18 @@ export default defineComponent({
                     githubLink,
                     personalWebsiteLink,
                     youtubeLink,
-                    linkedinLink,
-                    xLink,
-                    facebookLink,
-                    instagramLink,
                     devToLink,
                     codeWarsLink,
                     freeCodeCampLink,
-                    mediumLink,
+                    linkedinLink,
                     stackoverflowLink,
-                    threadsLink,
+                    xLink,
+                    facebookLink,
+                    CodepenLink,
+                    HashnodeLink,
+                    GitlabLink,
+                    TwitchLink,
+                    FrontendMentorLink,
                 } = response.profile;
                 this.userProfileDetails = {
                     userId,
@@ -188,13 +191,15 @@ export default defineComponent({
                     linkedinLink,
                     xLink,
                     facebookLink,
-                    instagramLink,
+                    CodepenLink,
                     devToLink,
                     codeWarsLink,
                     freeCodeCampLink,
-                    mediumLink,
+                    HashnodeLink,
+                    GitlabLink,
+                    TwitchLink,
+                    FrontendMentorLink,
                     stackoverflowLink,
-                    threadsLink
                 };
                 this.profileData.firstName = firstName;
                 this.profileData.lastName = lastName;
