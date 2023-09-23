@@ -43,13 +43,15 @@ model Profile {
   devToLink           String?
   codeWarsLink        String?
   freeCodeCampLink    String?
-  mediumLink          String?
   linkedinLink        String?
   stackoverflowLink   String?
   xLink               String?
   facebookLink        String?
-  instagramLink       String?
-  threadsLink         String?
+  CodepenLink         String?
+  HashnodeLink        String?
+  GitlabLink          String?
+  TwitchLink          String?
+  FrontendMentorLink  String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
