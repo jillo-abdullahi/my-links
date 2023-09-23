@@ -38,8 +38,8 @@ export default defineComponent({
     data() {
         return {
             tabs: [
-                { name: 'Links', current: false },
-                { name: 'Profile', current: true },
+                { name: 'Links', current: true },
+                { name: 'Profile', current: false },
             ] as { name: string, current: boolean }[],
             profileImagePreview: '',
             profileData: {

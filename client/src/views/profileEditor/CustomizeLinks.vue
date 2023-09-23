@@ -77,63 +77,6 @@ export default defineComponent({
 
 
     },
-    mounted() {
-        if (!this.userProfileDetails) return
-        const {
-            githubLink,
-            personalWebsiteLink,
-            youtubeLink,
-            devToLink,
-            codeWarsLink,
-            freeCodeCampLink,
-            linkedinLink,
-            stackoverflowLink,
-            xLink,
-            facebookLink,
-            CodepenLink,
-            HashnodeLink,
-            GitlabLink,
-            TwitchLink,
-            FrontendMentorLink,
-        } = this.userProfileDetails
-
-        // construct the links
-
-        interface Link {
-            [key: string]: string | undefined,
-        }
-        const links: Link = {
-            [LinkOptions.Github]: githubLink,
-            [LinkOptions.PortfolioWebsite]: personalWebsiteLink,
-            [LinkOptions.YouTube]: youtubeLink,
-            [LinkOptions.Dev_to]: devToLink,
-            [LinkOptions.CodeWars]: codeWarsLink,
-            [LinkOptions.FreeCodeCamp]: freeCodeCampLink,
-            [LinkOptions.LinkedIn]: linkedinLink,
-            [LinkOptions.StackOverFlow]: stackoverflowLink,
-            [LinkOptions.Twitter]: xLink,
-            [LinkOptions.Facebook]: facebookLink,
-            [LinkOptions.Codepen]: CodepenLink,
-            [LinkOptions.Hashnode]: HashnodeLink,
-            [LinkOptions.Gitlab]: GitlabLink,
-            [LinkOptions.Twitch]: TwitchLink,
-            [LinkOptions.Frontend_Mentor]: FrontendMentorLink,
-        }
-
-        Object.keys(links).forEach((key, index) => {
-            const url = links[key]
-            if (url) {
-                const linkOption = {
-                    platform: key,
-                    url,
-                    id: index.toString(),
-                    error: ""
-                }
-                this.links[index] = linkOption
-            }
-        })
-
-    },
     watch: {
         links: {
             handler() {
@@ -146,6 +89,15 @@ export default defineComponent({
 
             },
             deep: true
+        },
+
+        // craft links object once user profile details is available
+        // thought having this on mount() would suffice.
+        userProfileDetails() {
+            if (this.userProfileDetails) {
+                this.getUserLinks(this.userProfileDetails)
+            }
+
         }
     },
     computed: {
@@ -153,7 +105,74 @@ export default defineComponent({
             return Object.keys(this.links).length === 0;
         }
     },
+    mounted() {
+        // craft links object on mount
+        // Not sure why this is necessary
+        if (this.userProfileDetails) {
+            this.getUserLinks(this.userProfileDetails)
+        }
+    },
     methods: {
+        /**
+         * Returns link object that can be displayed in the links component
+         * @param profileDetails - the profile details for the user
+         */
+        getUserLinks(profileDetails: UserProfileDetails) {
+            if (!profileDetails) return
+            const {
+                githubLink,
+                personalWebsiteLink,
+                youtubeLink,
+                devToLink,
+                codeWarsLink,
+                freeCodeCampLink,
+                linkedinLink,
+                stackoverflowLink,
+                xLink,
+                facebookLink,
+                CodepenLink,
+                HashnodeLink,
+                GitlabLink,
+                TwitchLink,
+                FrontendMentorLink,
+            } = profileDetails
+
+            // construct the links
+
+            interface Link {
+                [key: string]: string | undefined,
+            }
+            const links: Link = {
+                [LinkOptions.Github]: githubLink,
+                [LinkOptions.PortfolioWebsite]: personalWebsiteLink,
+                [LinkOptions.YouTube]: youtubeLink,
+                [LinkOptions.Dev_to]: devToLink,
+                [LinkOptions.CodeWars]: codeWarsLink,
+                [LinkOptions.FreeCodeCamp]: freeCodeCampLink,
+                [LinkOptions.LinkedIn]: linkedinLink,
+                [LinkOptions.StackOverFlow]: stackoverflowLink,
+                [LinkOptions.Twitter]: xLink,
+                [LinkOptions.Facebook]: facebookLink,
+                [LinkOptions.Codepen]: CodepenLink,
+                [LinkOptions.Hashnode]: HashnodeLink,
+                [LinkOptions.Gitlab]: GitlabLink,
+                [LinkOptions.Twitch]: TwitchLink,
+                [LinkOptions.Frontend_Mentor]: FrontendMentorLink,
+            }
+
+            Object.keys(links).forEach((key, index) => {
+                const url = links[key]
+                if (url) {
+                    const linkOption = {
+                        platform: key,
+                        url,
+                        id: index.toString(),
+                        error: ""
+                    }
+                    this.links[index] = linkOption
+                }
+            })
+        },
         addNewLink(): void {
             const linkId = uuid.v4();
             this.links[linkId] = {
@@ -209,8 +228,6 @@ export default defineComponent({
             })
 
             // return if there's any link with an error.
-
-            console.log("LINK ERROR", this.linkErrors)
             if (this.linkErrors.length) return
 
             const linksObject = this.devLinks;
