@@ -122,7 +122,6 @@ export default defineComponent({
 
         Object.keys(links).forEach((key, index) => {
             const url = links[key]
-
             if (url) {
                 const linkOption = {
                     platform: key,
@@ -130,9 +129,8 @@ export default defineComponent({
                     id: index.toString(),
                     error: ""
                 }
-                this.links[key] = linkOption
+                this.links[index] = linkOption
             }
-
         })
 
     },
@@ -189,7 +187,6 @@ export default defineComponent({
                 return
             }
 
-
             // check if link is valid
             try {
                 new URL(link.url);
@@ -201,20 +198,19 @@ export default defineComponent({
 
             }
 
-            this.linkErrors = []
-
-
-
         },
         submitLinks(): void {
             console.log('submitting links', this.links)
 
             //validate links
+            this.linkErrors = [];
             Object.keys(this.links).forEach(linkId => {
                 this.validateLink(linkId);
             })
 
             // return if there's any link with an error.
+
+            console.log("LINK ERROR", this.linkErrors)
             if (this.linkErrors.length) return
 
             const linksObject = this.devLinks;
