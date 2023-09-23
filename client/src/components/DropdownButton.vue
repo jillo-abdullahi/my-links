@@ -70,6 +70,7 @@ import FrontendMentorIcon from '@/assets/brandIcons/FrontendMentorIcon.vue'
 import CodeWarsIcon from '@/assets/brandIcons/CodeWarsIcon.vue'
 import StackOverFlowIcon from '@/assets/brandIcons/StackOverFlowIcon.vue'
 import PortfolioIcon from '@/assets/brandIcons/PortfolioIcon.vue'
+import { LinkOptions } from "@/types"
 
 
 export default defineComponent({
@@ -95,64 +96,64 @@ export default defineComponent({
             selectedOptionIndex: 0,
             dropDownItems: [
                 {
-                    name: 'Portfolio website',
+                    name: LinkOptions.PortfolioWebsite,
                     icon: PortfolioIcon,
                 },
                 {
-                    name: 'Github',
+                    name: LinkOptions.Github,
                     icon: GithubIcon,
                 },
                 {
-                    name: 'Codepen',
+                    name: LinkOptions.Codepen,
                     icon: CodePenIcon,
                 },
                 {
-                    name: 'Twitter',
+                    name: LinkOptions.Twitter,
                     icon: TwitterIcon,
                 },
                 {
-                    name: 'YouTube',
+                    name: LinkOptions.YouTube,
                     icon: YouTubeIcon,
 
                 },
                 {
-                    name: 'Facebook',
+                    name: LinkOptions.Facebook,
                     icon: FacebookIcon,
                 },
                 {
-                    name: 'Dev.to',
+                    name: LinkOptions.Dev_to,
                     icon: DevToIcon,
                 },
                 {
-                    name: 'LinkedIn',
+                    name: LinkOptions.LinkedIn,
                     icon: LinkedInIcon,
                 },
                 {
-                    name: 'FreeCodeCamp',
+                    name: LinkOptions.FreeCodeCamp,
                     icon: FreeCodeCampIcon,
                 },
                 {
-                    name: 'Hashnode',
+                    name: LinkOptions.Hashnode,
                     icon: HashnodeIcon,
                 },
                 {
-                    name: 'Gitlab',
+                    name: LinkOptions.Gitlab,
                     icon: GitlabIcon,
                 },
                 {
-                    name: 'Twitch',
+                    name: LinkOptions.Twitch,
                     icon: TwitchIcon,
                 },
                 {
-                    name: 'Frontend Mentor',
+                    name: LinkOptions.Frontend_Mentor,
                     icon: FrontendMentorIcon,
                 },
                 {
-                    name: 'CodeWars',
+                    name: LinkOptions.CodeWars,
                     icon: CodeWarsIcon,
                 },
                 {
-                    name: 'StackOverFlow',
+                    name: LinkOptions.StackOverFlow,
                     icon: StackOverFlowIcon,
 
                 }
@@ -169,33 +170,35 @@ export default defineComponent({
         // set link icon based on link prop
         linkIcon() {
             switch (this.link.platform) {
-                case 'Github':
+                case LinkOptions.PortfolioWebsite:
+                    return PortfolioIcon;
+                case LinkOptions.Github:
                     return GithubIcon
-                case 'Codepen':
+                case LinkOptions.Codepen:
                     return CodePenIcon
-                case 'Twitter':
+                case LinkOptions.Twitter:
                     return TwitterIcon
-                case 'YouTube':
+                case LinkOptions.YouTube:
                     return YouTubeIcon
-                case 'Facebook':
+                case LinkOptions.Facebook:
                     return FacebookIcon
-                case 'Dev.to':
+                case LinkOptions.Dev_to:
                     return DevToIcon
-                case 'LinkedIn':
+                case LinkOptions.LinkedIn:
                     return LinkedInIcon
-                case 'FreeCodeCamp':
+                case LinkOptions.FreeCodeCamp:
                     return FreeCodeCampIcon
-                case 'Hashnode':
+                case LinkOptions.Hashnode:
                     return HashnodeIcon
-                case 'Gitlab':
+                case LinkOptions.Gitlab:
                     return GitlabIcon
-                case 'Twitch':
+                case LinkOptions.Twitch:
                     return TwitchIcon
-                case 'Frontend Mentor':
+                case LinkOptions.Frontend_Mentor:
                     return FrontendMentorIcon
-                case 'CodeWars':
+                case LinkOptions.CodeWars:
                     return CodeWarsIcon
-                case 'StackOverFlow':
+                case LinkOptions.StackOverFlow:
                     return StackOverFlowIcon
                 default:
                     return GithubIcon
