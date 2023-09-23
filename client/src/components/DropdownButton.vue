@@ -69,6 +69,7 @@ import TwitchIcon from '@/assets/brandIcons/TwitchIcon.vue'
 import FrontendMentorIcon from '@/assets/brandIcons/FrontendMentorIcon.vue'
 import CodeWarsIcon from '@/assets/brandIcons/CodeWarsIcon.vue'
 import StackOverFlowIcon from '@/assets/brandIcons/StackOverFlowIcon.vue'
+import PortfolioIcon from '@/assets/brandIcons/PortfolioIcon.vue'
 
 
 export default defineComponent({
@@ -93,6 +94,10 @@ export default defineComponent({
             showDropdown: false,
             selectedOptionIndex: 0,
             dropDownItems: [
+                {
+                    name: 'Portfolio website',
+                    icon: PortfolioIcon,
+                },
                 {
                     name: 'Github',
                     icon: GithubIcon,
