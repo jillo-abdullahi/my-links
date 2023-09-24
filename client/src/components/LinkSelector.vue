@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-gray-100 rounded-lg p-5 w-full gap-y-3 flex flex-col">
+    <div class="bg-gray-100 rounded-lg p-5 w-full gap-y-3 flex flex-col cursor-pointer">
         <div class="flex items-center justify-between">
             <button class="flex items-center justify-start gap-x-2">
                 <DragIcon />
@@ -21,10 +21,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 import DropdownButton from '@/components/DropdownButton.vue';
 import InputField from '@/components/InputField.vue';
 import DragIcon from '@/assets/icons/DragIcon.vue';
+import { Link } from "@/types"
 
 export default defineComponent({
     name: 'LinkSelector',
@@ -35,11 +36,11 @@ export default defineComponent({
     },
     props: {
         link: {
-            type: Object, // TODO: fix this type
+            type: Object as PropType<Link>,
             required: true
         },
         links: {
-            type: Object, // TODO: fix this type
+            type: Object as PropType<Link[]>,
             required: true
         },
         linkIndex: {
