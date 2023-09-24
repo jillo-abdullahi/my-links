@@ -199,8 +199,6 @@ export default defineComponent({
                 }
 
                 // send to api
-
-
                 const res = await fetch(`${API_URL}/profile`, {
                     method: "PATCH",
                     mode: 'cors',

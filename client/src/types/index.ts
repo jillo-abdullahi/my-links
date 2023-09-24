@@ -24,6 +24,8 @@ export interface UserProfileDetails {
   GitlabLink?: string;
   TwitchLink?: string;
   FrontendMentorLink?: string;
+
+  links: Link[];
 }
 
 export interface UserProfile {
@@ -33,14 +35,14 @@ export interface UserProfile {
   userProfileImage: string;
 }
 
-export interface Links {
-  [key: string]: {
-    platform: string;
-    url: string;
-    id: string;
-    error?: string;
-  };
+export interface Link {
+  platform: LinkOptions;
+  url: string;
+  id: number;
+  error?: string;
 }
+
+export type Links = Link[];
 
 export enum LinkOptions {
   Github = "Github",
@@ -58,8 +60,4 @@ export enum LinkOptions {
   CodeWars = "CodeWars",
   StackOverFlow = "StackOverFlow",
   PortfolioWebsite = "Portfolio website",
-}
-
-export interface DevLinks {
-  [key: string]: { url: string };
 }
