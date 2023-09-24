@@ -2,8 +2,6 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import "./index.css";
 import { createRouter, createWebHistory } from "vue-router";
-import Toast from "vue-toastification";
-import "vue-toastification/dist/index.css";
 import withUUID from "vue-uuid";
 import SignUpForm from "@/views/SignUpForm.vue";
 import LoginForm from "@/views/LoginForm.vue";
@@ -29,11 +27,4 @@ const router = createRouter({
   routes,
 });
 
-withUUID(createApp(App))
-  .use(Toast, {
-    transition: "Vue-Toastification__fade",
-    maxToasts: 20,
-    newestOnTop: true,
-  })
-  .use(router)
-  .mount("#app");
+withUUID(createApp(App)).use(router).mount("#app");
