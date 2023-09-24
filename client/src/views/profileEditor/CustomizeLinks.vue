@@ -21,10 +21,10 @@
             </div>
             <div v-else>
                 <draggable v-model="links" :disabled="false" @start="dragging = true" @end="dragging = false" item-key="id">
-                    <template #item="{ element }">
+                    <template #item="{ element, index }">
                         <div class="mt-10 w-full">
                             <LinkSelector @update-selected="setLinkPlatform" @set-link-value="setLinkUrl"
-                                @remove-link="removeLink" :link="element" :links="links" :linkIndex="element.index" />
+                                @remove-link="removeLink" :link="element" :links="links" :linkIndex="index" />
                         </div>
 
                     </template>
@@ -47,6 +47,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
+import { uuid } from "vue-uuid";
 import draggable from "vuedraggable"
 import ButtonSecondary from "@/components/ButtonSecondary.vue";
 import ButtonPrimary from "@/components/ButtonPrimary.vue";
@@ -131,11 +132,12 @@ export default defineComponent({
             this.links = links.length ? links : [];
         },
         addNewLink(): void {
+            const id = uuid.v4()
             this.links.push({
                 platform: LinkOptions.PortfolioWebsite,
                 url: "",
                 error: "",
-                id: this.links.length
+                id
             });
         },
         setLinkPlatform(selectedOption: LinkOptions, linkId: number): void {
@@ -147,10 +149,11 @@ export default defineComponent({
             this.links[linkId].url = value;
             this.links[linkId].error = ""
         },
-        removeLink(linkId: number): void {
+        removeLink(linkId: string): void {
             this.links = this.links.filter(link => link.id !== linkId);
-            // remove link straight away
-            this.submitLinks();
+            // remove link straight away 
+
+            this.submitLinks(true);
         },
 
         validateLink(link: Link) {
@@ -174,16 +177,24 @@ export default defineComponent({
             }
 
         },
-        submitLinks(): void {
+        submitLinks(isRemovingLink?: boolean): void {
 
-            //validate links
-            this.linkErrors = [];
-            this.links.forEach(link => {
-                this.validateLink(link);
-            })
+            // validate links
+            // this check ensures we don't need to validate when removing links
+            if (!isRemovingLink) {
+                this.linkErrors = [];
+                this.links.forEach(link => {
+                    this.validateLink(link);
+                })
+            }
+
 
             // return if there's any link with an error.
             if (this.linkErrors.length) return
+
+            // we don't want to submit links that are empty
+            // this can happen when removing links
+            const links = this.links.filter(link => Boolean(link.url));
 
             // api call to submit links
             const API_URL = process.env.VUE_APP_API_LINK;
@@ -195,7 +206,7 @@ export default defineComponent({
                     "Authorization": `Bearer ${this.accessToken}`
                 },
                 body: JSON.stringify({
-                    ...this.userProfileDetails, links: this.links
+                    ...this.userProfileDetails, links
                 }),
             }).then(res => res.json()).then((response) => {
                 console.log({ "LINKS RESP": response })

@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between">
             <button class="flex items-center justify-start gap-x-2">
                 <DragIcon />
-                <div class="text-gray-400">Link #{{ linkIndex }}</div>
+                <div class="text-gray-400">Link #{{ linkIndex + 1 }}</div>
             </button>
             <button class="text-gray-400 hover:text-red-700" @click="removeLink">Remove</button>
         </div>
@@ -58,11 +58,11 @@ export default defineComponent({
     },
     methods: {
         updatePlatform(selectedOption: string) {
-            this.$emit('updateSelected', selectedOption, this.link.id);
+            this.$emit('updateSelected', selectedOption, this.linkIndex);
         },
         updateLinkUrl(event: InputEvent) {
             this.linkUrl = (event.target as HTMLInputElement).value;
-            this.$emit('setLinkValue', this.linkUrl, this.link.id);
+            this.$emit('setLinkValue', this.linkUrl, this.linkIndex);
         },
         removeLink() {
             this.$emit('removeLink', this.link.id);

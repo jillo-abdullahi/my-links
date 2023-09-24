@@ -38,7 +38,7 @@ export interface UserProfile {
 export interface Link {
   platform: LinkOptions;
   url: string;
-  id: number;
+  id: string;
   error?: string;
 }
 
