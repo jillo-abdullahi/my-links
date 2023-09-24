@@ -3,7 +3,7 @@
         <div class="p-10 w-full">
             <div class="text-left">
                 <h1 class="text-4xl font-bold text-gray-700 pb-2">Customize your links</h1>
-                <h2 class="text-gray-400 text-base">Add/edit/remove links below and then share all your profiles with the
+                <h2 class="text-gray-400 text-base">Add/edit/remove/re-order links below and then share all your profiles with the
                     world!
                 </h2>
             </div>
@@ -151,9 +151,6 @@ export default defineComponent({
         },
         removeLink(linkId: string): void {
             this.links = this.links.filter(link => link.id !== linkId);
-            // remove link straight away 
-
-            this.submitLinks(true);
         },
 
         validateLink(link: Link) {
@@ -177,24 +174,16 @@ export default defineComponent({
             }
 
         },
-        submitLinks(isRemovingLink?: boolean): void {
-
+        submitLinks(): void {
             // validate links
-            // this check ensures we don't need to validate when removing links
-            if (!isRemovingLink) {
-                this.linkErrors = [];
-                this.links.forEach(link => {
-                    this.validateLink(link);
-                })
-            }
-
+            this.linkErrors = [];
+            this.links.forEach(link => {
+                this.validateLink(link);
+            })
 
             // return if there's any link with an error.
             if (this.linkErrors.length) return
 
-            // we don't want to submit links that are empty
-            // this can happen when removing links
-            const links = this.links.filter(link => Boolean(link.url));
 
             // api call to submit links
             const API_URL = process.env.VUE_APP_API_LINK;
@@ -206,7 +195,7 @@ export default defineComponent({
                     "Authorization": `Bearer ${this.accessToken}`
                 },
                 body: JSON.stringify({
-                    ...this.userProfileDetails, links
+                    ...this.userProfileDetails, links: this.links
                 }),
             }).then(res => res.json()).then((response) => {
                 console.log({ "LINKS RESP": response })
