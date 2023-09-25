@@ -9,22 +9,6 @@ export interface UserProfileDetails {
   profileImage: string;
   backgroundImage: string;
 
-  githubLink?: string;
-  personalWebsiteLink?: string;
-  youtubeLink?: string;
-  devToLink?: string;
-  codeWarsLink?: string;
-  freeCodeCampLink?: string;
-  linkedinLink?: string;
-  stackoverflowLink?: string;
-  xLink?: string;
-  facebookLink?: string;
-  CodepenLink?: string;
-  HashnodeLink?: string;
-  GitlabLink?: string;
-  TwitchLink?: string;
-  FrontendMentorLink?: string;
-
   links: Link[];
 }
 
@@ -32,6 +16,7 @@ export interface UserProfile {
   firstName: string;
   lastName: string;
   bio: string;
+  email?: string;
   userProfileImage: string;
 }
 

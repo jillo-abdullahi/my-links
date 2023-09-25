@@ -6,7 +6,7 @@
                 <div class="col-span-5 hidden md:block">
                     <MobilePreview
                         :profile-image-preview="profileImagePreview ? profileImagePreview : profileData.userProfileImage"
-                        :bio="profileData.bio" :username="username" />
+                        :full-name="`${profileData.firstName} ${profileData.lastName}`" :email="profileData.email" />
                 </div>
                 <div class="col-span-12 md:col-span-7">
                     <div v-if="profileTabActive">
@@ -20,6 +20,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
     </div>
@@ -31,6 +32,7 @@ import NavBar from "./NavBar.vue";
 import MobilePreview from "./MobilePreview.vue";
 import CustomizeLinks from "./CustomizeLinks.vue";
 import ProfileDetails from "./ProfileDetails.vue";
+
 import { UserProfileDetails, UserProfile } from "@/types";
 
 export default defineComponent({
@@ -46,6 +48,7 @@ export default defineComponent({
                 firstName: "",
                 lastName: "",
                 bio: "",
+                email: "",
                 userProfileImage: "",
             } as UserProfile,
             // details about user
@@ -59,7 +62,7 @@ export default defineComponent({
         NavBar,
         MobilePreview,
         CustomizeLinks,
-        ProfileDetails
+        ProfileDetails,
     },
     computed: {
         linksTabActive(): boolean {
@@ -153,6 +156,7 @@ export default defineComponent({
                 // TODO: display this on the mobile screen
 
                 console.log(response)
+                const { email } = response
                 const {
                     userId,
                     firstName,
@@ -176,6 +180,7 @@ export default defineComponent({
                 this.profileData.firstName = firstName;
                 this.profileData.lastName = lastName;
                 this.profileData.bio = bio;
+                this.profileData.email = email;
                 this.profileData.userProfileImage = profileImage;
 
                 // show image on the mobile preview section

@@ -23,14 +23,14 @@
                             backgroundSize: 'cover',
                             backgroundRepeat: 'no-repeat'
                         }"></div>
-                        <div class="flex flex-col items-center justify-center space-y-3">
+                        <div class="flex flex-col items-center justify-center space-y-1">
 
                             <!-- username  -->
-                            <div v-if="username" class="text-gray-800 font-bold">@{{ username }}</div>
+                            <div v-if="fullName" class="text-gray-800 font-bold">{{ fullName }}</div>
                             <div class="bg-gray-300 w-40 h-4 rounded-full" v-else></div>
 
                             <!-- bio  -->
-                            <div v-if="bio" class="text-gray-900 text-sm max-w-[200px] line-clamp-3">{{ bio }}
+                            <div v-if="email" class="text-gray-900 text-sm max-w-[200px] line-clamp-3">{{ email }}
                             </div>
                             <div class="bg-gray-300 w-28 h-2 rounded-full" v-else></div>
                         </div>
@@ -61,12 +61,12 @@ export default defineComponent({
             type: String,
             default: ''
         },
-        username: {
+        email: {
             type: String,
             required: true,
             default: ''
         },
-        bio: {
+        fullName: {
             type: String,
             required: true,
             default: ''
