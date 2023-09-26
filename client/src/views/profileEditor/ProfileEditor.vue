@@ -48,6 +48,7 @@ export default defineComponent({
                 firstName: "",
                 lastName: "",
                 bio: "",
+                profession: "",
                 email: "",
                 userProfileImage: "",
             } as UserProfile,
@@ -180,6 +181,7 @@ export default defineComponent({
                 this.profileData.firstName = firstName;
                 this.profileData.lastName = lastName;
                 this.profileData.bio = bio;
+                this.profileData.profession = profession;
                 this.profileData.email = email;
                 this.profileData.userProfileImage = profileImage;
 

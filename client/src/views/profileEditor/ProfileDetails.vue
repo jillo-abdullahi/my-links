@@ -9,7 +9,8 @@
             </div>
             <div class="rounded-lg bg-gray-100 space-y-5 mt-10 p-5">
                 <div class="grid w-full grid-cols-12">
-                    <div class="text-gray-400 hidden md:flex items-center justify-start col-span-4">Profile picture</div>
+                    <div class="text-gray-400 hidden md:flex items-center justify-start col-span-4">Profile picture
+                    </div>
                     <div class="col-span-12 md:col-span-8 grid grid-cols-12 gap-x-6">
                         <div class="col-span-6 w-48 h-48 rounded-lg bg-purple-100 flex items-center justify-center" :style="{
                             backgroundImage: `url(${previewProfileImage ? previewProfileImage : profileData.userProfileImage})`,
@@ -31,7 +32,8 @@
                                     v-show="!profileData.userProfileImage && !previewProfileImage">+ Upload Image</p>
                             </label>
                         </div>
-                        <div class=" text-gray-400 col-span-6 flex items-center justify-start text-left text-sm">Image must
+                        <div class=" text-gray-400 col-span-6 flex items-center justify-start text-left text-sm">Image
+                            must
                             be below 1024x1024px. Use PNG or JPG
                             format.</div>
                     </div>
@@ -52,6 +54,15 @@
                         <InputField type="text" name="lastName" id="last-name" placeholder="e.g. Appleseed"
                             label="Email address" :value="profileData.lastName" :error="error.lastName"
                             :use-row-label="true" :hide-input-icon="true" :default-value="profileData.lastName"
+                            @input="setFormValue" />
+                    </div>
+                </div>
+                <div class="grid w-full grid-cols-12">
+                    <div class="text-gray-400 hidden md:flex items-center justify-start col-span-4">Profession</div>
+                    <div class="col-span-12 md:col-span-8">
+                        <InputField type="text" name="profession" id="profession" placeholder="e.g. Full stack engineer"
+                            label="Profession" :value="profileData.profession" :error="error.profession"
+                            :use-row-label="true" :hide-input-icon="true" :default-value="profileData.profession"
                             @input="setFormValue" />
                     </div>
                 </div>
@@ -91,6 +102,7 @@ export default defineComponent({
         UploadImageIcon,
         TextArea,
         PencilIcon,
+
     },
     props: {
         profileData: {
@@ -127,7 +139,8 @@ export default defineComponent({
             error: {
                 bio: "",
                 firstName: "",
-                lastName: ""
+                lastName: "",
+                profession: ""
             }
         }
     },
@@ -189,7 +202,7 @@ export default defineComponent({
                         "Authorization": `Bearer ${this.accessToken}`
                     },
                     body: JSON.stringify({
-                        ...this.userProfileDetails, profileImage, firstName: this.profileData.firstName, lastName: this.profileData.lastName, bio: this.profileData.bio
+                        ...this.userProfileDetails, profileImage, firstName: this.profileData.firstName, lastName: this.profileData.lastName, bio: this.profileData.bio, profession: this.profileData.profession
                     }),
                 });
 
