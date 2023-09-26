@@ -18,6 +18,7 @@ export interface UserProfile {
   bio: string;
   profession: string;
   email?: string;
+  links: Link[];
   userProfileImage: string;
 }
 
