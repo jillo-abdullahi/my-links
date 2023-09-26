@@ -1,7 +1,7 @@
 <template>
     <div class="-mt-12">
         <div class="p-6">
-            <NavBar @change-tabs="setActiveTab" :tabs="tabs" />
+            <NavBar @change-tabs="setActiveTab" :tabs="tabs" :username="username" />
             <div class="pt-6 grid grid-cols-12 gap-x-6">
                 <div class="col-span-5 hidden md:block">
                     <MobilePreview

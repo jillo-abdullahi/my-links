@@ -69,7 +69,6 @@ export default defineComponent({
                 };
 
             }).catch((err) => {
-
                 //TODO: show this on the UI
                 console.log(err)
             })

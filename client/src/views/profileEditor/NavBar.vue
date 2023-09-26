@@ -52,6 +52,10 @@ export default defineComponent({
         tabs: {
             type: Object as PropType<Tab[]>,
             required: true
+        },
+        username: {
+            type: String,
+            required: true
         }
     },
     methods: {
@@ -59,7 +63,7 @@ export default defineComponent({
             this.$emit('changeTabs', currentTabIndex)
         },
         goToPreview() {
-            this.$router.push({ name: 'profile' });
+            this.$router.push({ name: 'profile', params: { username: this.username } });
         }
     }
 
