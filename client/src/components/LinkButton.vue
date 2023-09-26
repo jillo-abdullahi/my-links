@@ -12,13 +12,13 @@
         </a>
         <button type="button"
             class="w-1/4 bg-opacity-90 hover:bg-opacity-95 relative -ml-px inline-flex items-center justify-center rounded-r-md px-3 py-4 text-xs font-semibold"
-            :class="getLinkStyles(link.platform).styles"><span>Copied</span></button>
+            :class="getLinkStyles(link.platform).styles" @click="copyToClipboard(link.url)"><span>{{ copyText
+            }}</span></button>
     </span>
 </template>
   
 <script lang="ts">
 import { defineComponent, PropType, Component } from 'vue';
-// import { CopyIcon } from '@heroicons/vue/20/solid'
 import { LinkOptions, Link } from '@/types';
 
 // Link icons
@@ -38,8 +38,13 @@ import CodeWarsIcon from '@/assets/brandIcons/CodeWarsIcon.vue'
 import StackOverFlowIcon from '@/assets/brandIcons/StackOverFlowIcon.vue'
 import PortfolioIcon from '@/assets/brandIcons/PortfolioIcon.vue';
 
-export default defineComponent({
 
+export default defineComponent({
+    data() {
+        return {
+            copyText: 'Copy',
+        }
+    },
     props: {
         link: {
             type: Object as PropType<Link>,
@@ -47,6 +52,21 @@ export default defineComponent({
         }
     },
     methods: {
+        async copyToClipboard(mytext: string) {
+            try {
+                await navigator.clipboard.writeText(mytext);
+                this.copyText = 'Copied';
+                this.resetCopyText()
+            } catch (err) {
+                this.copyText = 'Failed';
+                this.resetCopyText()
+            }
+        },
+        resetCopyText() {
+            setTimeout(() => {
+                this.copyText = 'Copy';
+            }, 1000);
+        },
         getLinkStyles(linkPlatform: string): { icon: Component, styles: string, props?: { [key: string]: string } } {
             switch (linkPlatform) {
                 case LinkOptions.Github:

@@ -19,7 +19,7 @@ const routes = [
     component: ProfileEditor,
     name: "profile-editor",
   },
-  { path: "/profile", component: ProfilePreview, name: "profile" },
+  { path: "/profile/:username", component: ProfilePreview, name: "profile" },
 ];
 
 const router = createRouter({
@@ -27,4 +27,9 @@ const router = createRouter({
   routes,
 });
 
-withUUID(createApp(App)).use(router).mount("#app");
+const app = createApp(App);
+
+app.use(router);
+app.use(withUUID);
+
+app.mount("#app");
