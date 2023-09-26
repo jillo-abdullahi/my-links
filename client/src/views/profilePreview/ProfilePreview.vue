@@ -1,6 +1,11 @@
 <template>
     <div class="relative min-h-screen w-full -mt-12 ">
-        <div class="absolute top-0 inset-x-0 bg-purple-700 rounded-none sm:rounded-b-2xl h-1/4"></div>
+        <div class="absolute top-0 inset-x-0 bg-purple-700 rounded-none h-1/4" :style="{
+            backgroundImage: `url(${backgroundImage})`,
+            backgroundOrigin: 'center center',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat'
+        }"></div>
         <div class="relative p-6 z-10">
             <ProfileNavBar />
         </div>
@@ -23,6 +28,7 @@ export default defineComponent({
     },
     data() {
         return {
+            backgroundImage: require("@/assets/wave-bg.svg"),
             profileImage: 'https://res.cloudinary.com/dsuhsqcb2/image/upload/v1692357018/zg2egmlqwm3mifkny4ke.jpg'
 
         }
