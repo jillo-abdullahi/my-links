@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [],
+  content: ["./node_modules/flowbite/**/*.js"],
   purge: [
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
@@ -27,5 +27,9 @@ module.exports = {
       },
     },
   },
-  plugins: [require("@tailwindcss/forms"), require("@tailwindcss/line-clamp")],
+  plugins: [
+    require("@tailwindcss/forms"),
+    require("@tailwindcss/line-clamp"),
+    require("flowbite/plugin"),
+  ],
 };

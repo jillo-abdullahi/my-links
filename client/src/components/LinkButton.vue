@@ -98,7 +98,7 @@ export default defineComponent({
                 case LinkOptions.YouTube:
                     return { styles: "bg-[#EE3939] text-white", icon: YouTubeIcon }
                 case LinkOptions.Codepen:
-                    return { styles: "bg-[#1D1E22] text-white", icon: CodePenIcon }
+                    return { styles: "bg-[#444857] text-white", icon: CodePenIcon }
                 case LinkOptions.FreeCodeCamp:
                     return { styles: "bg-[#302267] text-white", icon: FreeCodeCampIcon }
                 case LinkOptions.PortfolioWebsite:
