@@ -1,5 +1,5 @@
 <template>
-    <span class="isolate inline-flex rounded-md shadow-sm w-72">
+    <span class="isolate inline-flex rounded-md shadow-sm" :class="width">
         <a type="button" :href="link.url"
             class="relative inline-flex items-center gap-x-1.5 rounded-l-md px-5 py-4 text-sm font-semibold w-3/4"
             :class="getLinkStyles(link.platform).styles" target="_blank">
@@ -49,6 +49,10 @@ export default defineComponent({
         link: {
             type: Object as PropType<Link>,
             required: true
+        },
+        width: {
+            type: String,
+            default: 'w-72'
         }
     },
     methods: {

@@ -3,7 +3,8 @@
         <div class="p-10 w-full">
             <div class="text-left">
                 <h1 class="text-4xl font-bold text-gray-700 pb-2">Customize your links</h1>
-                <h2 class="text-gray-400 text-base">Add/edit/remove/re-order links below and then share all your profiles with the
+                <h2 class="text-gray-400 text-base">Add/edit/remove/re-order links below and then share all your profiles
+                    with the
                     world!
                 </h2>
             </div>
@@ -100,10 +101,12 @@ export default defineComponent({
         },
 
         links: {
-            handler() {
-                console.log({ LINKS: this.links })
+            handler(links) {
+                //TODO: Revisit this
+                this.links = links;
             },
-            deep: true
+            deep: true,
+            immediate: true
 
         }
     },
