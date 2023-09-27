@@ -2,7 +2,7 @@
     <button class="text-white font-bold py-2 px-4 rounded-lg" :disabled="disabled" :class="{
         'cursor-not-allowed bg-purple-300': disabled,
         'cursor-pointer bg-purple-700 hover:bg-opacity-90': !disabled,
-        'w-full': fullWidth
+        'w-full': fullWidth, 'w-32': useFixedWidth
     }" @click="$emit('buttonClicked')">
         <div v-if="!isInProgressState">{{ text }}</div>
         <div class="w-full flex items-center justify-center py-2" v-else-if="isInProgressState">
@@ -34,6 +34,10 @@ export default defineComponent({
             default: true
         },
         isInProgressState: {
+            type: Boolean,
+            default: false
+        },
+        useFixedWidth: {
             type: Boolean,
             default: false
         }

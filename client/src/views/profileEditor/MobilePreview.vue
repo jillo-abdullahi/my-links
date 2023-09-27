@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent, watch } from "vue";
+import { PropType, defineComponent } from "vue";
 import { Links } from "@/types"
 import LinkButton from "@/components/LinkButton.vue";
 

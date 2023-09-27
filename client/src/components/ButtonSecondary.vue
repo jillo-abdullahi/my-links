@@ -34,7 +34,6 @@ export default defineComponent({
     computed: {
         isResponsiveAndInNav() {
 
-            console.log("WHAT IS the state here",this.isInsideNav && this.isMobileResponsive)
             return this.isInsideNav && this.isMobileResponsive
         }
     }

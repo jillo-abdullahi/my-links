@@ -7,7 +7,7 @@
             backgroundRepeat: 'no-repeat'
         }"></div>
         <div class="relative p-6 z-10">
-            <ProfileNavBar />
+            <ProfileNavBar :username="username"/>
         </div>
         <div class="relative flex justify-center z-10">
             <ProfileLinks :user-profile-details="userProfileDetails" />
