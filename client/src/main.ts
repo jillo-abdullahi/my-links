@@ -8,6 +8,7 @@ import LoginForm from "@/views/LoginForm.vue";
 import ForgotPasswordForm from "@/views/ForgotPasswordForm.vue";
 import ProfileEditor from "@/views/profileEditor/ProfileEditor.vue";
 import ProfilePreview from "@/views/profilePreview/ProfilePreview.vue";
+import NotFoundPage from "@/views/NotFoundPage.vue";
 
 const routes = [
   { path: "/", component: LoginForm },
@@ -20,6 +21,7 @@ const routes = [
     name: "profile-editor",
   },
   { path: "/profile/:username", component: ProfilePreview, name: "profile" },
+  { path: "/:catchAll(.*)", component: NotFoundPage, name: "not-found" }
 ];
 
 const router = createRouter({
