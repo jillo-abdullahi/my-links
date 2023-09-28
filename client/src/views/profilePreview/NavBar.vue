@@ -1,9 +1,23 @@
 <template>
     <div class="flex w-full items-center justify-between px-5 py-4 rounded-lg bg-white">
-        <ButtonSecondary text="Back to Editor" :is-inside-nav="true" @button-clicked="backToEditor"
-            :is-mobile-responsive="false" />
-        <ButtonPrimary :text="shareButtonText" :full-width="false" :use-fixed-width="true"
-            @click="copyToClipboard(profileLink)" />
+        <!-- back to editor/ login page button  -->
+        <div v-if="loading" class="animate-pulse">
+            <div class="bg-gray-300 w-36 h-10 rounded-md"></div>
+        </div>
+        <div v-if="!loading">
+            <ButtonSecondary text="Back to Editor" :is-inside-nav="true" @button-clicked="backToEditor"
+                :is-mobile-responsive="false" />
+        </div>
+
+        <!-- profile share link button  -->
+        <div v-if="loading" class="animate-pulse">
+            <div class="bg-gray-300 w-36 h-10 rounded-md"></div>
+        </div>
+        <div v-if="!loading">
+            <ButtonPrimary :text="shareButtonText" :full-width="false" :use-fixed-width="true"
+                @click="copyToClipboard(profileLink)" />
+        </div>
+
     </div>
 </template>
 
@@ -19,6 +33,11 @@ export default defineComponent({
             type: String as PropType<string | string[]>,
             required: true,
             default: () => "",
+        },
+        loading: {
+            type: Boolean,
+            required: true,
+            default: false,
         }
     },
     data() {
