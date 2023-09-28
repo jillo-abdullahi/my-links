@@ -73,14 +73,14 @@
             <div class="rounded-md bg-gray-300 h-14 w-72 my-4"></div>
             <div class="rounded-md bg-gray-300 h-14 w-72 my-4"></div>
         </div>
-        <div class="flex flex-col" v-if="!isLoadingProfile && userProfileDetails.links.length > 0">
+        <div class="flex flex-col" v-if="!isLoadingProfile && userProfileDetails?.links?.length > 0">
             <div class="cursor-pointer rounded-lg p-4 flex items-center justify-between hover:bg-opacity-90"
                 v-for="(link, index) in userProfileDetails.links" :key="index" :href="link.url">
                 <LinkButton :link="link" />
             </div>
         </div>
         <div class="flex flex-col items-center justify-center"
-            v-if="!isLoadingProfile && userProfileDetails.links.length === 0">
+            v-if="!isLoadingProfile && userProfileDetails?.links?.length === 0">
             <div class="backdrop-blur-md bg-white/30 relative">
                 <div class="rounded-md bg-gray-300 h-14 w-72 my-4 blur-sm"></div>
                 <div class="rounded-md bg-gray-300 h-14 w-72 my-4 blur-sm"></div>
@@ -147,7 +147,7 @@ export default defineComponent({
     },
     computed: {
         profileHasNoLinks() {
-            return this.userProfileDetails.links.length === 0 && !this.loading && !this.error.internalError && !this.error.internalError;
+            return this.userProfileDetails?.links?.length === 0 && !this.loading && !this.error.internalError && !this.error.internalError;
         },
         isLoadingProfile() {
             return this.loading && !this.error.internalError && !this.error.internalError;
