@@ -24,26 +24,33 @@ import { UserProfileDetails } from '@/types';
 
 export default defineComponent({
     name: "ProfilePreview",
+    components: {
+        ProfileNavBar,
+        ProfileLinks
+    },
     data() {
         return {
             backgroundImage: require("@/assets/wave-bg.svg"),
             backgroundErrorImage: require("@/assets/wave-error-bg.svg"),
-            username: '' as string | string[],
+            username: '' as string,
             userProfileDetails: {} as UserProfileDetails,
             error: {
                 internalError: false,
                 userNotFound: false
+            } as {
+                internalError: boolean,
+                userNotFound: boolean
             },
-            loading: true,
-            fetchedUsername: ''
+            loading: true as boolean,
+            fetchedUsername: '' as string
 
         }
     },
     computed: {
-        hasError() {
+        hasError(): boolean {
             return this.error.internalError || this.error.userNotFound;
         },
-        showNavBar() {
+        showNavBar(): boolean {
             // check if user is admin
             const isAdmin = this.username === this.fetchedUsername
             return !this.hasError && isAdmin;
@@ -58,12 +65,8 @@ export default defineComponent({
             this.fetchUserProfile();
         }
     },
-    components: {
-        ProfileNavBar,
-        ProfileLinks
-    },
     mounted() {
-        this.username = this.$route.params.username;
+        this.username = this.$route.params.username as string;
     },
     methods: {
         fetchUserProfile() {
