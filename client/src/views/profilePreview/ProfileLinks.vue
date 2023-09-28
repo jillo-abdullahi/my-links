@@ -5,9 +5,9 @@
             <div class="flex flex-col justify-center items-center gap-y-6" v-if="!hasError">
                 <!-- user profile image  -->
                 <div v-if="isLoadingProfile" class="animate-pulse flex items-center justify-center">
-                    <div class="bg-gray-300 w-24 h-24 rounded-full"></div>
+                    <div class="bg-gray-300 w-32 h-32 rounded-full"></div>
                 </div>
-                <div v-if="!isLoadingProfile" class="bg-gray-300 w-24 h-24 rounded-full" :style="{
+                <div v-if="!isLoadingProfile" class="bg-gray-300 w-32 h-32 rounded-full" :style="{
                     backgroundImage: `url(${userProfileDetails.profileImage})`,
                     backgroundOrigin: 'center center',
                     backgroundSize: 'cover',
@@ -18,8 +18,11 @@
                 <div v-if="isLoadingProfile" class="animate-pulse flex items-center justify-center">
                     <div class="bg-gray-300 w-48 h-5 rounded-full"></div>
                 </div>
-                <h1 v-else class="text-3xl font-bold text-gray-900">{{ `${userProfileDetails.firstName}
-                                    ${userProfileDetails.lastName}` }}</h1>
+                <div v-else>
+                    <h1 v-if="fullName" class="text-3xl font-bold text-gray-900">{{ fullName }}</h1>
+                    <h1 v-else class="text-3xl font-bold text-gray-900">@{{ username }}</h1>
+                </div>
+
             </div>
             <div class="flex flex-col justify-center items-center gap-y-6 w-full" v-else>
 
@@ -70,11 +73,26 @@
             <div class="rounded-md bg-gray-300 h-14 w-72 my-4"></div>
             <div class="rounded-md bg-gray-300 h-14 w-72 my-4"></div>
         </div>
-        <div class="flex flex-col" v-if="!isLoadingProfile">
+        <div class="flex flex-col" v-if="!isLoadingProfile && userProfileDetails.links.length > 0">
             <div class="cursor-pointer rounded-lg p-4 flex items-center justify-between hover:bg-opacity-90"
                 v-for="(link, index) in userProfileDetails.links" :key="index" :href="link.url">
                 <LinkButton :link="link" />
             </div>
+        </div>
+        <div class="flex flex-col items-center justify-center"
+            v-if="!isLoadingProfile && userProfileDetails.links.length === 0">
+            <div class="backdrop-blur-md bg-white/30 relative">
+                <div class="rounded-md bg-gray-300 h-14 w-72 my-4 blur-sm"></div>
+                <div class="rounded-md bg-gray-300 h-14 w-72 my-4 blur-sm"></div>
+                <div class="rounded-md bg-gray-300 h-14 w-72 my-4 blur-sm"></div>
+                <p
+                    class="text-gray-700 absolute inset-y-0 inset-x-0 h-fit my-auto text-center flex flex-col items-center justify-center  space-y-1">
+                    <NoLinkIcon />
+                    This profile has no links yet.
+                </p>
+            </div>
+
+
         </div>
 
     </div>
@@ -86,6 +104,7 @@ import LinkButton from '@/components/LinkButton.vue';
 import NotFoundIcon from '@/assets/icons/NotFoundIcon.vue';
 import InternalServerErrorIcon from '@/assets/icons/InternalServerErrorIcon.vue'
 import ButtonPrimary from '@/components/ButtonPrimary.vue';
+import NoLinkIcon from '@/assets/icons/NoLinkIcon.vue';
 import { UserProfileDetails } from '@/types';
 
 
@@ -95,11 +114,16 @@ export default defineComponent({
         LinkButton,
         NotFoundIcon,
         InternalServerErrorIcon,
-        ButtonPrimary
+        ButtonPrimary,
+        NoLinkIcon
     },
     props: {
         userProfileDetails: {
             type: Object as PropType<UserProfileDetails>,
+            required: true
+        },
+        username: {
+            type: String,
             required: true
         },
         error: {
@@ -127,6 +151,9 @@ export default defineComponent({
         },
         isLoadingProfile() {
             return this.loading && !this.error.internalError && !this.error.internalError;
+        },
+        fullName() {
+            return `${this.userProfileDetails.firstName ?? ""} ${this.userProfileDetails.lastName ?? ""}`.trim()
         }
 
     },

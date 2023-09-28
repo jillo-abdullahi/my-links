@@ -7,7 +7,7 @@
 
                 <div
                     class="mx-auto my-auto z-10 m-10 border-2 border-gray-400 overflow-scroll no-scrollbar h-full w-full rounded-[36px]">
-                    <div class="flex flex-col items-center justify-center space-y-4 pt-16">
+                    <div class="flex flex-col items-center justify-center space-y-4 pt-20">
                         <div class="bg-gray-300 w-24 h-24 rounded-full" :style="{
                             backgroundImage: `url(${profileImagePreview})`,
                             backgroundOrigin: 'center center',

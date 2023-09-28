@@ -11,7 +11,7 @@
         </div>
         <div class="relative flex justify-center z-10" :class="{ 'pt-40': hasError }">
             <ProfileLinks :user-profile-details="userProfileDetails" :error="error" :has-error="hasError" :loading="loading"
-                @refetchUserProfile="fetchUserProfile" />
+                @refetchUserProfile="fetchUserProfile" :username="username" />
         </div>
     </div>
 </template>
