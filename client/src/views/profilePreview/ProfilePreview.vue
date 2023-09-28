@@ -9,7 +9,7 @@
         <div class="relative p-6 z-10" v-show="showNavBar">
             <ProfileNavBar :username="username" :loading="loading" />
         </div>
-        <div class="relative flex justify-center z-10" :class="{ 'pt-40': hasError }">
+        <div class="relative flex justify-center z-10" :class="{ 'pt-40': hasError || loading }">
             <ProfileLinks :user-profile-details="userProfileDetails" :error="error" :has-error="hasError" :loading="loading"
                 @refetchUserProfile="fetchUserProfile" :username="username" />
         </div>
