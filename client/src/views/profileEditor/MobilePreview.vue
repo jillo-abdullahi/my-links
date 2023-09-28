@@ -16,11 +16,11 @@
                         }"></div>
                         <div class="flex flex-col items-center justify-center space-y-1">
 
-                            <!-- username  -->
+                            <!-- full name  -->
                             <div v-if="fullName" class="text-gray-800 font-bold">{{ fullName }}</div>
                             <div class="bg-gray-300 w-40 h-4 rounded-full" v-else></div>
 
-                            <!-- bio  -->
+                            <!-- profession  -->
                             <div v-if="profession" class="text-gray-900 text-sm max-w-[200px] line-clamp-3">{{
                                 profession }}
                             </div>
@@ -105,11 +105,10 @@ export default defineComponent({
         links: {
             handler(links) {
                 this.devLinks = links
-                console.log("LINKS CHANGED", links)
             },
             immediate: true,
             deep: true
-        }
+        },
     }
 });
 </script>

@@ -6,8 +6,8 @@
                 <div class="col-span-5 hidden md:block">
                     <MobilePreview
                         :profile-image-preview="profileImagePreview ? profileImagePreview : profileData.userProfileImage"
-                        :full-name="`${profileData.firstName} ${profileData.lastName}`" :email="profileData.email"
-                        :profession="profileData.profession" :links="profileData.links" />
+                        :full-name="fullName" :email="profileData.email" :profession="profileData.profession"
+                        :links="profileData.links" />
                 </div>
                 <div class="col-span-12 md:col-span-7">
                     <div v-if="profileTabActive">
@@ -73,6 +73,9 @@ export default defineComponent({
         },
         profileTabActive(): boolean {
             return this.tabs[1].current === true;
+        },
+        fullName(): string {
+            return `${this.profileData.firstName ?? ""} ${this.profileData.lastName ?? ""}`.trim();
         }
     },
     methods: {
