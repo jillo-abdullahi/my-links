@@ -104,6 +104,7 @@ export default defineComponent({
     mounted() {
         // get user dettails from local storage
         const storedUserDetails = localStorage.getItem('DevLinksUserDetails')
+        console.log({ "STORE USER DETAILS": storedUserDetails })
         if (storedUserDetails) {
             const user = JSON.parse(storedUserDetails)
             const { access_token } = user;
@@ -141,6 +142,7 @@ export default defineComponent({
 
         } else {
             // prompt user to sign in again
+            console.log("COULD NOT FIND USER")
             this.$router.push({ name: 'SignIn' })
         }
 
@@ -150,6 +152,8 @@ export default defineComponent({
         username() {
             // send to api
             const apiUrl = process.env.VUE_APP_API_LINK
+
+            console.log({ "USERNAME": this.username })
 
             fetch(`${apiUrl}/profile/${this.username}`, {
                 method: "GET",
