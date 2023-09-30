@@ -3,7 +3,7 @@
         <div class="p-10 w-full">
             <div class="text-left">
                 <h1 class="text-4xl font-bold text-gray-700 pb-2">Customize your links</h1>
-                <h2 class="text-gray-400 text-base">Add, edit, remove or reorder links below 
+                <h2 class="text-gray-400 text-base">Add, edit, remove or reorder links below
                 </h2>
             </div>
 
@@ -77,9 +77,15 @@ export default defineComponent({
 
     data() {
         return {
+            // using links separately here because the draggable component
+            // somehow doesn't seem to work with profileDetals.links
             links: [] as Links,
             linkErrors: [] as string[],
-            dragging: false
+            dragging: false,
+
+            // re-assigning userProfileDetails prop to this state data
+            // because we'll need to change link values and links order
+            profileDetails: {} as UserProfileDetails,
 
         }
 
@@ -87,33 +93,35 @@ export default defineComponent({
     },
     watch: {
         // craft links object once user profile details is available
-        // thought having this on mount() would suffice.
-        userProfileDetails() {
-            if (this.userProfileDetails) {
-                this.getUserLinks(this.userProfileDetails)
-            }
-        },
-
-        links: {
-            handler(links) {
-                //TODO: Revisit this
-                this.links = links;
+        userProfileDetails: {
+            handler(val: UserProfileDetails) {
+                this.profileDetails = val;
             },
-            deep: true,
-            immediate: true
-
+            immediate: true,
+            deep: true
+        },
+        profileDetails: {
+            handler(val: UserProfileDetails) {
+                if (this.profileDetails) {
+                    this.getUserLinks(val)
+                }
+            },
+            immediate: true,
+            deep: true
+        },
+        links: {
+            handler(_links: Links) {
+                // event updates the order of links in the
+                // mobile preview component
+                this.$emit("update-links", _links)
+            },
+            immediate: true,
+            deep: true
         }
     },
     computed: {
         linksEmpty(): boolean {
             return this.links.length === 0;
-        }
-    },
-    mounted() {
-        // craft links object on mount
-        // Not sure why this is necessary
-        if (this.userProfileDetails) {
-            this.getUserLinks(this.userProfileDetails)
         }
     },
     methods: {

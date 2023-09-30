@@ -17,7 +17,7 @@
                     </div>
                     <div v-else-if="linksTabActive">
                         <CustomizeLinks :access-token="accessToken" :user-id="userId"
-                            :user-profile-details="userProfileDetails" />
+                            :user-profile-details="userProfileDetails" @update-links="updateLinks" />
                     </div>
                 </div>
             </div>
@@ -34,7 +34,7 @@ import MobilePreview from "./MobilePreview.vue";
 import CustomizeLinks from "./CustomizeLinks.vue";
 import ProfileDetails from "./ProfileDetails.vue";
 
-import { UserProfileDetails, UserProfile } from "@/types";
+import { UserProfileDetails, UserProfile, Link } from "@/types";
 
 export default defineComponent({
     name: "ProfileEditor",
@@ -79,6 +79,11 @@ export default defineComponent({
         }
     },
     methods: {
+        updateLinks(links: Link[]) {
+            if (!this.userProfileDetails) return;
+            this.userProfileDetails.links = links; // update link values
+            this.profileData.links = links; // update the order of links
+        },
         setActiveTab(tabIndex: number): void {
             this.tabs.forEach((tab, index) => {
                 if (index === tabIndex) {
@@ -153,8 +158,6 @@ export default defineComponent({
             // send to api
             const apiUrl = process.env.VUE_APP_API_LINK
 
-            console.log({ "USERNAME": this.username })
-
             fetch(`${apiUrl}/profile/${this.username}`, {
                 method: "GET",
                 mode: 'cors',
@@ -162,10 +165,6 @@ export default defineComponent({
                     "Content-Type": "application/json",
                 },
             }).then((res) => res.json()).then((response) => {
-
-                // TODO: display this on the mobile screen
-
-                console.log(response)
                 const { email } = response
                 const {
                     userId,
